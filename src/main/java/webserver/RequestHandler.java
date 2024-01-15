@@ -31,19 +31,13 @@ public class RequestHandler implements Runnable {
             String fileType = getFileType(requestPath);
             DataOutputStream dos = new DataOutputStream(out);
             if (fileType.equals("html")) {
-                // 함수 묶기
                 byte[] body = readHtmlFile("/templates/index.html");
-                response200Header(dos, body.length, "html");
-                responseBody(dos, body);
-            }else{
-                byte[] body = readHtmlFile("/static" + requestPath);
-                response200Header(dos, body.length, fileType);
+                response200Header(dos, body.length);
                 responseBody(dos, body);
             }
-
             String bodyMessage = "hello world";
             byte[] body = bodyMessage.getBytes();
-            response200Header(dos, body.length, "html");
+            response200Header(dos, body.length);
             responseBody(dos, body);
 
         } catch (IOException e) {
@@ -72,20 +66,10 @@ public class RequestHandler implements Runnable {
 
 
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String type) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            if (type.equals("html")) {
-                dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            } else if (type.equals("css")) {
-                dos.writeBytes("Content-Type: text/css;charset=utf-8\r\n");
-            } else if (type.equals("js")) {
-                dos.writeBytes("Content-Type: application/javascript;charset=utf-8\r\n");
-            }else if (type.equals("ico")) {
-                dos.writeBytes("Content-Type: image/x-icon;charset=utf-8\r\n");
-            } else if (type.equals("woff")) {
-                dos.writeBytes("Content-Type: application/font-woff;charset=utf-8\r\n");
-            }
+            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
