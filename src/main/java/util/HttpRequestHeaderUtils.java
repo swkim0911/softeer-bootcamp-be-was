@@ -1,5 +1,6 @@
 package util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -9,9 +10,9 @@ public class HttpRequestHeaderUtils {
     private HttpRequestHeaderUtils() {
     }
 
-    public static HttpRequestHeaderUtils createHeaderUtils(InputStream in) throws IOException {
+    public static HttpRequestHeaderUtils createHeaderUtils(String requestMessage) throws IOException {
         HttpRequestHeaderUtils httpRequestHeaderUtils = new HttpRequestHeaderUtils();
-        httpRequestHeaderUtils.requestHeaderMap = HttpRequestHeaderParser.parse(in);
+        httpRequestHeaderUtils.requestHeaderMap = HttpRequestHeaderParser.parse(requestMessage);
         return httpRequestHeaderUtils;
     }
 
