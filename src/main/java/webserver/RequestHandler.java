@@ -26,7 +26,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequestHeaderUtils requestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(in);
             logHeaders(requestHeaderUtils);
-            String requestPath = requestHeaderUtils.getRequestPath();
+            String requestPath = requestHeaderUtils.getRequestUri();
             DataOutputStream dos = new DataOutputStream(out);
             if (requestPath.equals("/index.html")) {
                 byte[] body = readHtmlFile("src/main/resources/templates/index.html");
@@ -43,10 +43,11 @@ public class RequestHandler implements Runnable {
     // 필요한 헤더 출력
     private static void logHeaders(HttpRequestHeaderUtils requestHeaderUtils){
         logger.debug("Method: {}", requestHeaderUtils.getRequestMethod());
-        logger.debug("Request-Path: {}", requestHeaderUtils.getRequestPath());
+        logger.debug("Request-Path: {}", requestHeaderUtils.getRequestUri());
         logger.debug("Version: {}", requestHeaderUtils.getRequestVersion());
+        logger.debug("User-Agent: {}", requestHeaderUtils.getRequestUserAgent());
+        logger.debug("Host: {}", requestHeaderUtils.getHost());
         logger.debug("Accept: {}", requestHeaderUtils.getAccept());
-        logger.debug("Accept-Language: {}", requestHeaderUtils.getAcceptLanguage());
         logger.debug("Cookie: {}", requestHeaderUtils.getCookie());
     }
 

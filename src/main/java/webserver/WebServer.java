@@ -20,7 +20,6 @@ public class WebServer {
         } else {
             port = Integer.parseInt(args[0]);
         }
-
         // 쓰레드 풀 생성
         ExecutorService executor = Executors.newFixedThreadPool(10);
 

@@ -18,20 +18,21 @@ public class HttpRequestHeaderUtils {
     public String getRequestMethod() {
         return requestHeaderMap.get("Method");
     }
-    public String getRequestPath() {
-        return requestHeaderMap.get("RequestPath");
+    public String getRequestUri() {
+        return requestHeaderMap.get("RequestUri");
     }
     public String getRequestVersion() {
         return requestHeaderMap.get("Version");
     }
-    public String getAcceptLanguage() {
-        return requestHeaderMap.get("Accept-Language");
+    public String getRequestUserAgent() {
+        return requestHeaderMap.get("User-Agent");
     }
-
+    public String getHost() {
+        return requestHeaderMap.get("Host");
+    }
     public String getCookie() {
         return requestHeaderMap.get("Cookie");
     }
-
     public String getAccept() {
         return requestHeaderMap.get("Accept");
     }
