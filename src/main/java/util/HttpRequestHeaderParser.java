@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class HttpRequestHeaderParser {
 
@@ -23,7 +25,7 @@ public class HttpRequestHeaderParser {
 
     private static String parseHeader(BufferedReader br, Map<String, String> requestHeaderMap) throws IOException {
         String line = br.readLine();
-        String[] header = line.split(":");
+        String[] header = line.split(":",2);
         if (header.length > 1) {
             String field = header[0];
             String value = header[1].stripLeading();
