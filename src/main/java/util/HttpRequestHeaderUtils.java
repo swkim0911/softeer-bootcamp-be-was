@@ -1,8 +1,6 @@
 package util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 public class HttpRequestHeaderUtils {
@@ -22,7 +20,6 @@ public class HttpRequestHeaderUtils {
     public String getRequestUri() {
         return requestHeaderMap.get("RequestUri");
     }
-
     public String getQueryString() {
         return requestHeaderMap.get("QueryString");
     }

@@ -2,16 +2,17 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 import builder.RequestBuilder;
 import builder.ResponseBuilder;
+import db.Database;
+import dto.UserDto;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestHeaderUtils;
+import util.UserEntityConverter;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,15 +30,15 @@ public class RequestHandler implements Runnable {
             String requestMessage = RequestBuilder.getRequestMessage(in);
             HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
             logHeaders(httpRequestHeaderUtils);
-            String requestUri = httpRequestHeaderUtils.getRequestUri();
-            sendResponse(out, requestUri);
+            sendResponse(out, httpRequestHeaderUtils);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void sendResponse(OutputStream out, String requestUri) throws IOException {
+    private void sendResponse(OutputStream out, HttpRequestHeaderUtils httpRequestHeaderUtils) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
+        String requestUri = httpRequestHeaderUtils.getRequestUri();
         if (requestUri.equals("/") || requestUri.equals("/index.html")) {
             byte[] body = readHtmlFile("src/main/resources/templates/index.html");
             ResponseBuilder.buildResponseMessage(dos, body);
@@ -47,9 +48,10 @@ public class RequestHandler implements Runnable {
             ResponseBuilder.buildResponseMessage(dos, body);
             dos.flush();
         }else if(requestUri.equals("/user/create")){
-
+            UserDto userDto = UserDto.fromQueryString(httpRequestHeaderUtils.getQueryString());
+            User user = UserEntityConverter.toEntity(userDto);
+            Database.addUser(user);
         }
-
         ResponseBuilder.buildResponseMessage(dos, makeDummyBody());
         dos.flush();
     }

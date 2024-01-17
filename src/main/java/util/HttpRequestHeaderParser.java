@@ -36,7 +36,7 @@ public class HttpRequestHeaderParser {
         String requestUri;
         String queryString = "None";
         if (uri.contains("?")) { // 쿼리 스트링이 있는 경우
-            int index = uri.indexOf("?"); // 쿼리 스트링에 사용자가 ?을 입력했을 수도 있으니까
+            int index = uri.indexOf("?"); // 쿼리 스트링에 사용자가 ?을 입력했을 수도 있으니까 처음 나오는 ?을 기준으로 파싱
             requestUri = uri.substring(0, index);
             queryString = uri.substring(index + 1);
         }else{
