@@ -1,20 +1,23 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
+import builder.RequestBuilder;
+import builder.ResponseBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestHeaderUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private final Socket connection;
 
-    private Socket connection;
-
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket){
         this.connection = connectionSocket;
     }
 
@@ -23,33 +26,44 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            String requestMessage = RequestBuilder.getRequestMessage(in);
+            HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
+            logHeaders(httpRequestHeaderUtils);
+            String requestUri = httpRequestHeaderUtils.getRequestUri();
+            sendResponse(out, requestUri);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
+    private void sendResponse(OutputStream out, String requestUri) throws IOException {
+        DataOutputStream dos = new DataOutputStream(out);
+        if (requestUri.equals("/index.html")) {
+            byte[] body = readHtmlFile("src/main/resources/templates/index.html");
+            ResponseBuilder.buildResponseMessage(dos, body);
             dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
         }
+        ResponseBuilder.buildResponseMessage(dos, makeDummyBody());
+        dos.flush();
+    }
+    // 필요한 헤더 출력
+    private static void logHeaders(HttpRequestHeaderUtils requestHeaderUtils){
+        logger.debug("Method: {}", requestHeaderUtils.getRequestMethod());
+        logger.debug("Request-Path: {}", requestHeaderUtils.getRequestUri());
+        logger.debug("Version: {}", requestHeaderUtils.getRequestVersion());
+        logger.debug("User-Agent: {}", requestHeaderUtils.getRequestUserAgent());
+        logger.debug("Host: {}", requestHeaderUtils.getHost());
+        logger.debug("Accept: {}", requestHeaderUtils.getAccept());
+        logger.debug("Cookie: {}", requestHeaderUtils.getCookie());
+    }
+
+    private byte[] readHtmlFile(String fileName) throws IOException {
+        // index.html 파일을 읽어서 바이트 배열로 반환
+        return Files.readAllBytes(new File(fileName).toPath());
+    }
+
+    private byte[] makeDummyBody() {
+        String bodyMessage = "hello world";
+        return bodyMessage.getBytes();
     }
 }
