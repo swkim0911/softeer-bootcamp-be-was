@@ -38,11 +38,18 @@ public class RequestHandler implements Runnable {
 
     private void sendResponse(OutputStream out, String requestUri) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
-        if (requestUri.equals("/index.html")) {
+        if (requestUri.equals("/") || requestUri.equals("/index.html")) {
             byte[] body = readHtmlFile("src/main/resources/templates/index.html");
             ResponseBuilder.buildResponseMessage(dos, body);
             dos.flush();
+        } else if (requestUri.equals("/user/form.html")) {
+            byte[] body = readHtmlFile("src/main/resources/templates/user/form.html");
+            ResponseBuilder.buildResponseMessage(dos, body);
+            dos.flush();
+        }else if(requestUri.equals("/user/create")){
+
         }
+
         ResponseBuilder.buildResponseMessage(dos, makeDummyBody());
         dos.flush();
     }
@@ -50,6 +57,7 @@ public class RequestHandler implements Runnable {
     private static void logHeaders(HttpRequestHeaderUtils requestHeaderUtils){
         logger.debug("Method: {}", requestHeaderUtils.getRequestMethod());
         logger.debug("Request-Path: {}", requestHeaderUtils.getRequestUri());
+        logger.debug("Query-String: {}", requestHeaderUtils.getQueryString());
         logger.debug("Version: {}", requestHeaderUtils.getRequestVersion());
         logger.debug("User-Agent: {}", requestHeaderUtils.getRequestUserAgent());
         logger.debug("Host: {}", requestHeaderUtils.getHost());

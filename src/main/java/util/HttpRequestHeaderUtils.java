@@ -22,6 +22,10 @@ public class HttpRequestHeaderUtils {
     public String getRequestUri() {
         return requestHeaderMap.get("RequestUri");
     }
+
+    public String getQueryString() {
+        return requestHeaderMap.get("QueryString");
+    }
     public String getRequestVersion() {
         return requestHeaderMap.get("Version");
     }

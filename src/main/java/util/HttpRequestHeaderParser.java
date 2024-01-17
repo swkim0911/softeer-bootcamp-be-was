@@ -24,8 +24,25 @@ public class HttpRequestHeaderParser {
     }
     private static void parseRequestLine(String requestLine, Map<String, String> requestHeaderMap){
         String[] fields = requestLine.split(" ");
-        requestHeaderMap.put("Method", fields[0]);
-        requestHeaderMap.put("RequestUri", fields[1]);
-        requestHeaderMap.put("Version", fields[2]);
+        String method = fields[0];
+        String uri = fields[1];
+        String version = fields[2];
+        requestHeaderMap.put("Method", method);
+        requestHeaderMap.put("Version", version);
+        putUriField(uri, requestHeaderMap);
+    }
+
+    private static void putUriField(String uri, Map<String, String> requestHeaderMap) {
+        String requestUri;
+        String queryString = "None";
+        if (uri.contains("?")) { // 쿼리 스트링이 있는 경우
+            int index = uri.indexOf("?"); // 쿼리 스트링에 사용자가 ?을 입력했을 수도 있으니까
+            requestUri = uri.substring(0, index);
+            queryString = uri.substring(index + 1);
+        }else{
+            requestUri = uri;
+        }
+        requestHeaderMap.put("RequestUri", requestUri);
+        requestHeaderMap.put("QueryString", queryString);
     }
 }
