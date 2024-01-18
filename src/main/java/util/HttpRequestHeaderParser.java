@@ -21,16 +21,30 @@ public class HttpRequestHeaderParser {
 
     public static Map<String, String> parseRequestLine(String requestMessage){
         Map<String, String> requestLineMap = new HashMap<>();
-        String[] lines = requestMessage.split("\r\n");
-        String requestLine = lines[0];
-        String[] fields = requestLine.split(" ");
-        String method = fields[0];
-        String uri = fields[1];
-        String version = fields[2];
-        requestLineMap.put("Method", method);
-        requestLineMap.put("Version", version);
+        String[] splitRequestLine = splitRequestLine(requestMessage);
+
+        putMethodField(splitRequestLine, requestLineMap);
+        putVersionField(splitRequestLine, requestLineMap);
+        String uri = splitRequestLine[1];
         putUriField(uri, requestLineMap);
         return requestLineMap;
+    }
+
+    private static void putVersionField(String[] splitRequestLine, Map<String, String> requestLineMap) {
+        String version = splitRequestLine[2];
+        requestLineMap.put("Version", version);
+    }
+
+    private static void putMethodField(String[] splitRequestLine, Map<String, String> requestLineMap) {
+        String method = splitRequestLine[0];
+        requestLineMap.put("Method", method);
+    }
+
+    private static String[] splitRequestLine(String requestMessage) {
+        String[] lines = requestMessage.split("\r\n");
+        String requestLine = lines[0];
+        return requestLine.split(" ");
+
     }
 
     private static void putUriField(String uri, Map<String, String> requestHeaderMap) {

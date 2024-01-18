@@ -42,7 +42,6 @@ public class HttpResponse {
             sb.append(line.getKey()).append(": ").append(line.getValue()).append("\r\n");
         }
         sb.append("\r\n");
-
         return sb.toString();
     }
 }

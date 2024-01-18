@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class HttpRequestHeaderUtils {
-    private Map<String, String> requestHeaderMap;
+    private Map<String, String> requestHeaderMap; // 헤더 <field, value> 저장
     private Map<String, String> requestLineMap;
     private HttpRequestHeaderUtils() {
     }
