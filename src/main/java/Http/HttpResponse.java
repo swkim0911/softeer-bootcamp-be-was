@@ -33,4 +33,16 @@ public class HttpResponse {
     public Optional<byte[]> getBody() {
         return body;
     }
+
+    public String getResponseHeader() {
+        StringBuilder sb = new StringBuilder();
+        String responseLine = version + " " + statusCode + "\r\n";
+        sb.append(responseLine);
+        for (Map.Entry<String, String> line : headerFields.entrySet()) {
+            sb.append(line.getKey()).append(": ").append(line.getValue()).append("\r\n");
+        }
+        sb.append("\r\n");
+
+        return sb.toString();
+    }
 }

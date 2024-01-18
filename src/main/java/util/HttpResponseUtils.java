@@ -5,30 +5,40 @@ import Http.HttpResponse;
 import Http.builder.HttpResponseBuilder;
 import Http.status.HttpStatusCode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HttpResponseUtils {
     public static HttpResponse get200HttpResponse(HttpRequest httpRequest, byte[] body) {
+        Map<String, String> headerFields = new HashMap<>();
+        headerFields.put("Content-Type", "text/html;charset=utf-8");
+        headerFields.put("Content-Length", String.valueOf(body.length));
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.OK)
-                .contentType("text/html;charset=utf-8")
-                .contentLength(body.length)
+                .headerFields(headerFields)
                 .body(body)
                 .build();
     }
     public static HttpResponse get302HttpResponse(HttpRequest httpRequest) {
+        Map<String, String> headerFields = new HashMap<>();
+        headerFields.put("Content-Type", "text/html;charset=utf-8");
+        headerFields.put("Location", "/index.html");
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.FOUND)
+                .headerFields(headerFields)
                 .build();
     }
-    //todo: step3 진행시 수정 예정
-    public static HttpResponse get404HttpResponse(HttpRequest httpRequest) {
-        byte[] body = HttpStatusCode.NOT_FOUND.getReasonPhrase().getBytes();
+
+    public static HttpResponse get404HttpResponse(HttpRequest httpRequest, byte[] body) {
+        Map<String, String> headerFields = new HashMap<>();
+        headerFields.put("Content-Type", "text/html;charset=utf-8");
+        headerFields.put("Content-Length", String.valueOf(body.length));
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.NOT_FOUND)
-                .contentType("text/html;charset=utf-8")
-                .contentLength(body.length)
+                .headerFields(headerFields)
                 .body(body)
                 .build();
     }

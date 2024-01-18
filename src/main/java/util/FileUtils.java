@@ -6,18 +6,32 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Optional;
 
 public class FileUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
-    public static byte[] readFile(String fileName) {
+    private static final String htmlPath = "src/main/resources/templates";
+    public static Optional<byte[]> readFile(String uri) {
         try {
-            return Files.readAllBytes(new File(fileName).toPath());
+            return Optional.of(Files.readAllBytes(new File(htmlPath + uri).toPath()));
         } catch (IOException e) {
             logger.error(e.getMessage());
-            return "파일을 찾을 수 없습니다.".getBytes();
+            return Optional.empty();
         }
     }
-    public static String getFileType(String uri) {
+
+//    private static Path getFilePath(String uri) {
+//        File file = new File(htmlPath + uri);
+//        Path path;
+//        if (file.exists() && file.isFile()) {
+//            path = file.toPath();
+//        }else{
+//            path = new File(htmlPath + "/error/404.html").toPath();
+//        }
+//        return path;
+//    }
+
+    private static String getFileType(String uri) {
         int index = uri.lastIndexOf(".");
         return uri.substring(index+1);
     }

@@ -14,8 +14,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class HttpRequestFactory {
 
     public static HttpRequest getRequestMessage(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        String requestMessage = URLDecoder.decode(buildRequestMessage(br), UTF_8);
+        String requestMessage = URLDecoder.decode(getStringRequestMessage(in), UTF_8);
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
         return new HttpRequestBuilder()
@@ -27,8 +26,9 @@ public class HttpRequestFactory {
                 .build();
     }
 
-    private static String buildRequestMessage(BufferedReader br) throws IOException {
+    private static String getStringRequestMessage(InputStream in) throws IOException {
         StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String line = br.readLine();
         sb.append(line).append("\r\n");
         while (!line.isEmpty()) { //마지막 라인 = ""(empty)

@@ -24,4 +24,9 @@ public enum HttpStatusCode {
     public String getReasonPhrase() {
         return reasonPhrase;
     }
+
+    @Override
+    public String toString() {
+        return this.code + " " + this.reasonPhrase;
+    }
 }
