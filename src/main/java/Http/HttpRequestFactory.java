@@ -18,7 +18,6 @@ public class HttpRequestFactory {
         String requestMessage = URLDecoder.decode(buildRequestMessage(br), UTF_8);
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
-
         return new HttpRequestBuilder()
                 .method(httpRequestHeaderUtils.getRequestMethod())
                 .uri(httpRequestHeaderUtils.getRequestUri())

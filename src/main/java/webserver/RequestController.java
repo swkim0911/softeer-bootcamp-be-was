@@ -8,8 +8,10 @@ import java.util.Map;
 
 import Http.HttpRequest;
 import Http.HttpRequestFactory;
-import Http.builder.HttpRequestBuilder;
+import Http.HttpResponse;
+import Http.HttpResponseSender;
 import Http.builder.HttpResponseBuilder;
+import Http.status.HttpStatusCode;
 import db.Database;
 import dto.UserDto;
 import model.User;
@@ -17,62 +19,81 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestHeaderUtils;
 import util.UserEntityConverter;
-import webserver.handler.ResourseRequestHandler;
+import webserver.handler.RequestHandler;
+import webserver.handler.HomeRequestHandler;
+import webserver.handler.UserRequestHandler;
 
 public class RequestController implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
-    private Map<String, Object> handlers = new HashMap<>();
+    private final Map<String, RequestHandler> handlers = new HashMap<>();
     private final Socket connection;
 
     public RequestController(Socket connectionSocket){
         this.connection = connectionSocket;
     }
-
     // handler 추가
     public void initHandler() {
-        ResourseRequestHandler resourseRequestHandler = new ResourseRequestHandler();
+        RequestHandler resourseRequestHandler = new HomeRequestHandler();
+        RequestHandler userRequestHandler = new UserRequestHandler();
         handlers.put("/", resourseRequestHandler);
+        handlers.put("/index.html", resourseRequestHandler);
+        handlers.put("/user", userRequestHandler);
     }
     public void run() {
+        initHandler();
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
-        initHandler();
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequestFactory.getRequestMessage(in);
             httpRequest.logHeaders();
-//            sendResponse(out, httpRequestHeaderUtils);
+            handleRequest(httpRequest, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void sendResponse(OutputStream out, HttpRequestHeaderUtils httpRequestHeaderUtils) throws IOException {
-        DataOutputStream dos = new DataOutputStream(out);
-        String requestUri = httpRequestHeaderUtils.getRequestUri();
-        if (requestUri.equals("/") || requestUri.equals("/index.html")) {
-            byte[] body = readHtmlFile("src/main/resources/templates/index.html");
-            HttpResponseBuilder.buildResponseMessage(dos, body);
-            dos.flush();
-        } else if (requestUri.equals("/user/form.html")) {
-            byte[] body = readHtmlFile("src/main/resources/templates/user/form.html");
-            HttpResponseBuilder.buildResponseMessage(dos, body);
-            dos.flush();
-        }else if(requestUri.equals("/user/create")){
-            UserDto userDto = UserDto.fromQueryString(httpRequestHeaderUtils.getQueryString());
-            User user = UserEntityConverter.toEntity(userDto);
-            Database.addUser(user);
+    public void handleRequest(HttpRequest httpRequest, OutputStream out) throws IOException {
+        RequestHandler handler = handlers.get(httpRequest.getUri());
+        HttpResponse httpResponse;
+        if (handler != null) {
+            httpResponse = handler.handle(httpRequest);
+            HttpResponseSender.send(httpResponse, out);
+            return;
         }
-        HttpResponseBuilder.buildResponseMessage(dos, makeDummyBody());
-        dos.flush();
-    }
-    // 필요한 헤더 출력
-    private byte[] readHtmlFile(String fileName) throws IOException {
-        // index.html 파일을 읽어서 바이트 배열로 반환
-        return Files.readAllBytes(new File(fileName).toPath());
+        //  잘못된 요청 - 404 보내기
+        logger.debug("not found:{}", httpRequest.getUri());
+
+        httpResponse = new HttpResponseBuilder()
+                .version(httpRequest.getVersion())
+                .status(HttpStatusCode.NOT_FOUND)
+                .contentType("text/html;charset=utf-8")
+                .contentLength(HttpStatusCode.NOT_FOUND.getReasonPhrase().length())
+                .body(HttpStatusCode.NOT_FOUND.getReasonPhrase().getBytes())
+                .build();
+
+        HttpResponseSender.send(httpResponse, out);
+
     }
 
-    private byte[] makeDummyBody() {
-        String bodyMessage = "hello world";
-        return bodyMessage.getBytes();
-    }
+
+    //todo 핸들러로 보내고 sender 클래스 만들자
+//    private void sendResponse(OutputStream out, HttpRequestHeaderUtils httpRequestHeaderUtils) throws IOException {
+//        DataOutputStream dos = new DataOutputStream(out);
+//        String requestUri = httpRequestHeaderUtils.getRequestUri();
+//        if (requestUri.equals("/") || requestUri.equals("/index.html")) {
+//            byte[] body = readHtmlFile("src/main/resources/templates/index.html");
+//            HttpResponseBuilder.buildResponseMessage(dos, body);
+//            dos.flush();
+//        } else if (requestUri.equals("/user/form.html")) {
+//            byte[] body = readHtmlFile("src/main/resources/templates/user/form.html");
+//            HttpResponseBuilder.buildResponseMessage(dos, body);
+//            dos.flush();
+//        }else if(requestUri.equals("/user/create")){
+//            UserDto userDto = UserDto.fromQueryString(httpRequestHeaderUtils.getQueryString());
+//            User user = UserEntityConverter.toEntity(userDto);
+//            Database.addUser(user);
+//        }
+//        HttpResponseBuilder.buildResponseMessage(dos, makeDummyBody());
+//        dos.flush();
+//    }
 }
