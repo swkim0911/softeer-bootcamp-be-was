@@ -13,6 +13,10 @@ public class HttpRequestHeaderUtilsTest {
     String requestMessage;
     @BeforeEach
     void init() {
+        requestMessage = getQueryStringRequestMessage();
+    }
+
+    private String getQueryStringRequestMessage() {
         StringBuilder sb = new StringBuilder();
         sb.append("GET /user/create?userId=hello&password=asd&name=swk&email=test@naver.com HTTP/1.1").append("\r\n");
         sb.append("Host: localhost:8080").append("\r\n");
@@ -21,7 +25,19 @@ public class HttpRequestHeaderUtilsTest {
         sb.append("Cookie: Idea-14db9320=4d059d9c-532a-48d2-8ebe-3a46dcd4402f").append("\r\n");
         sb.append("\r\n");
 
-        requestMessage = sb.toString();
+        return sb.toString();
+    }
+
+    private String getNoQueryStringRequestMessage() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("GET /index.html HTTP/1.1").append("\r\n");
+        sb.append("Host: localhost:8080").append("\r\n");
+        sb.append("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8").append("\r\n");
+        sb.append("User-Agent: Mozilla/4.0(compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; InfoPath.1)").append("\r\n");
+        sb.append("Cookie: Idea-14db9320=4d059d9c-532a-48d2-8ebe-3a46dcd4402f").append("\r\n");
+        sb.append("\r\n");
+
+        return sb.toString();
     }
 
     @Test
@@ -47,7 +63,7 @@ public class HttpRequestHeaderUtilsTest {
         String requestPath = httpRequestHeaderUtils.getRequestUri();
 
         //then
-        assertThat(requestPath).isEqualTo("/index.html");
+        assertThat(requestPath).isEqualTo("/user/create");
     }
 
     @Test
@@ -62,9 +78,19 @@ public class HttpRequestHeaderUtilsTest {
         //then
         assertThat(queryString).isEqualTo("userId=hello&password=asd&name=swk&email=test@naver.com");
     }
+    @Test
+    @DisplayName("쿼리 스트링 없는 경우 테스트")
+    void 쿼리_스트링_X_테스트() throws IOException {
+        //given
+        requestMessage = getNoQueryStringRequestMessage();
+        HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
-    //todo 쿼리 스트링 없는 경우도 유닛 테스트해야하는데 비포위치를 어떻게 해야할지
+        //when
+        String queryString = httpRequestHeaderUtils.getQueryString();
 
+        //then
+        assertThat(queryString).isEqualTo("None");
+    }
     @Test
     @DisplayName("프로토콜 버전 테스트")
     void 프로토콜_버전_테스트() throws IOException {

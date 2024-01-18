@@ -1,10 +1,10 @@
-package builder;
+package Http.builder;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 //builder 패턴을 적용할 수 있지 않을까?
-public class ResponseBuilder {
+public class HttpResponseBuilder {
 
     public static DataOutputStream buildResponseMessage(DataOutputStream dos, byte[] body) throws IOException {
         response200Header(dos, body.length);

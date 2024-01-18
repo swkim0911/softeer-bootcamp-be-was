@@ -1,11 +1,11 @@
-package webserver;
+package webserver.handler;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 
-import builder.RequestBuilder;
-import builder.ResponseBuilder;
+import Http.builder.HttpRequestBuilder;
+import Http.builder.HttpResponseBuilder;
 import db.Database;
 import dto.UserDto;
 import model.User;
@@ -17,7 +17,6 @@ import util.UserEntityConverter;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final Socket connection;
-
     public RequestHandler(Socket connectionSocket){
         this.connection = connectionSocket;
     }
@@ -27,7 +26,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            String requestMessage = RequestBuilder.getRequestMessage(in);
+
+
+
+            String requestMessage = HttpRequestBuilder.getRequestMessage(in);
             HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
             logHeaders(httpRequestHeaderUtils);
             sendResponse(out, httpRequestHeaderUtils);
@@ -41,18 +43,18 @@ public class RequestHandler implements Runnable {
         String requestUri = httpRequestHeaderUtils.getRequestUri();
         if (requestUri.equals("/") || requestUri.equals("/index.html")) {
             byte[] body = readHtmlFile("src/main/resources/templates/index.html");
-            ResponseBuilder.buildResponseMessage(dos, body);
+            HttpResponseBuilder.buildResponseMessage(dos, body);
             dos.flush();
         } else if (requestUri.equals("/user/form.html")) {
             byte[] body = readHtmlFile("src/main/resources/templates/user/form.html");
-            ResponseBuilder.buildResponseMessage(dos, body);
+            HttpResponseBuilder.buildResponseMessage(dos, body);
             dos.flush();
         }else if(requestUri.equals("/user/create")){
             UserDto userDto = UserDto.fromQueryString(httpRequestHeaderUtils.getQueryString());
             User user = UserEntityConverter.toEntity(userDto);
             Database.addUser(user);
         }
-        ResponseBuilder.buildResponseMessage(dos, makeDummyBody());
+        HttpResponseBuilder.buildResponseMessage(dos, makeDummyBody());
         dos.flush();
     }
     // 필요한 헤더 출력
