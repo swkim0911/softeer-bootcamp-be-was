@@ -13,7 +13,6 @@ public class HttpResponseBuilder {
     private HttpStatusCode statusCode;
     private String contentType;
     private int contentLength;
-
     private byte[] body;
 
     public HttpResponseBuilder version(String version) {
@@ -40,27 +39,5 @@ public class HttpResponseBuilder {
 
     public HttpResponse build() {
         return new HttpResponse(version, statusCode, contentType, contentLength, body);
-    }
-
-    public static void buildResponseMessage(DataOutputStream dos, byte[] body) {
-        try {
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-            dos.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private static void response200Header(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
-        dos.writeBytes("HTTP/1.1 200 OK \r\n");
-        dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-        dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-        dos.writeBytes("\r\n");
-    }
-
-    private static void responseBody(DataOutputStream dos, byte[] body) throws IOException {
-        dos.write(body, 0, body.length);
     }
 }

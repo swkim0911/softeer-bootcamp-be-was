@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -111,7 +112,8 @@ public class HttpRequestHeaderUtilsTest {
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
         //when
-        String host = httpRequestHeaderUtils.getHost();
+        Map<String, String> requestHeaders = httpRequestHeaderUtils.getRequestHeaders();
+        String host = requestHeaders.get("Host");
 
         //then
         assertThat(host).isEqualTo("localhost:8080");
@@ -124,7 +126,8 @@ public class HttpRequestHeaderUtilsTest {
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
         //when
-        String userAgent = httpRequestHeaderUtils.getRequestUserAgent();
+        Map<String, String> requestHeaders = httpRequestHeaderUtils.getRequestHeaders();
+        String userAgent = requestHeaders.get("User-Agent");
 
         //then
         assertThat(userAgent).isEqualTo("Mozilla/4.0(compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; InfoPath.1)");
@@ -137,7 +140,8 @@ public class HttpRequestHeaderUtilsTest {
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
         //when
-        String accept = httpRequestHeaderUtils.getAccept();
+        Map<String, String> requestHeaders = httpRequestHeaderUtils.getRequestHeaders();
+        String accept = requestHeaders.get("Accept");
 
         //then
         assertThat(accept).isEqualTo("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
@@ -150,8 +154,8 @@ public class HttpRequestHeaderUtilsTest {
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
         //when
-        String cookie = httpRequestHeaderUtils.getCookie();
-
+        Map<String, String> requestHeaders = httpRequestHeaderUtils.getRequestHeaders();
+        String cookie = requestHeaders.get("Cookie");
         //then
         assertThat(cookie).isEqualTo("Idea-14db9320=4d059d9c-532a-48d2-8ebe-3a46dcd4402f");
     }
