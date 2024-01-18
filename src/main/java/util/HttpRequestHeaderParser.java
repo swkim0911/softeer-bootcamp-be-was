@@ -22,7 +22,6 @@ public class HttpRequestHeaderParser {
     public static Map<String, String> parseRequestLine(String requestMessage){
         Map<String, String> requestLineMap = new HashMap<>();
         String[] splitRequestLine = splitRequestLine(requestMessage);
-
         putMethodField(splitRequestLine, requestLineMap);
         putVersionField(splitRequestLine, requestLineMap);
         String uri = splitRequestLine[1];

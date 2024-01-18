@@ -9,7 +9,7 @@ public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private final String method;
     private final String uri;
-    private final String queryString; // 없는 경우 none
+    private final String queryString; // 없는 경우 None
     private final String version;
     private final Map<String, String> headerFields;
 
