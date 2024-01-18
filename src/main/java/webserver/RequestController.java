@@ -40,7 +40,6 @@ public class RequestController implements Runnable {
             logger.error(e.getMessage());
         }
     }
-
     public void handleRequest(HttpRequest httpRequest, OutputStream out) throws IOException {
         String uri = httpRequest.getUri();
         RequestHandler requestHandler;
@@ -51,40 +50,5 @@ public class RequestController implements Runnable {
         }
         HttpResponse httpResponse = requestHandler.handle(httpRequest);
         HttpResponseSender.send(httpResponse, out);
-        //  잘못된 요청 - 404 보내기
-//        logger.debug("not found:{}", httpRequest.getUri());
-//
-//        httpResponse = new HttpResponseBuilder()
-//                .version(httpRequest.getVersion())
-//                .status(HttpStatusCode.NOT_FOUND)
-//                .contentType("text/html;charset=utf-8")
-//                .contentLength(HttpStatusCode.NOT_FOUND.getReasonPhrase().length())
-//                .body(HttpStatusCode.NOT_FOUND.getReasonPhrase().getBytes())
-//                .build();
-//
-//        HttpResponseSender.send(httpResponse, out);
-
     }
-
-
-    //todo 핸들러로 보내고 sender 클래스 만들자
-//    private void sendResponse(OutputStream out, HttpRequestHeaderUtils httpRequestHeaderUtils) throws IOException {
-//        DataOutputStream dos = new DataOutputStream(out);
-//        String requestUri = httpRequestHeaderUtils.getRequestUri();
-//        if (requestUri.equals("/") || requestUri.equals("/index.html")) {
-//            byte[] body = readHtmlFile("src/main/resources/templates/index.html");
-//            HttpResponseBuilder.buildResponseMessage(dos, body);
-//            dos.flush();
-//        } else if (requestUri.equals("/user/form.html")) {
-//            byte[] body = readHtmlFile("src/main/resources/templates/user/form.html");
-//            HttpResponseBuilder.buildResponseMessage(dos, body);
-//            dos.flush();
-//        }else if(requestUri.equals("/user/create")){
-//            UserDto userDto = UserDto.fromQueryString(httpRequestHeaderUtils.getQueryString());
-//            User user = UserEntityConverter.toEntity(userDto);
-//            Database.addUser(user);
-//        }
-//        HttpResponseBuilder.buildResponseMessage(dos, makeDummyBody());
-//        dos.flush();
-//    }
 }

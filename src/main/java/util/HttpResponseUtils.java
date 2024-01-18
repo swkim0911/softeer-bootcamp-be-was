@@ -6,7 +6,6 @@ import Http.builder.HttpResponseBuilder;
 import Http.status.HttpStatusCode;
 
 public class HttpResponseUtils {
-
     public static HttpResponse get200HttpResponse(HttpRequest httpRequest, byte[] body) {
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
@@ -16,14 +15,12 @@ public class HttpResponseUtils {
                 .body(body)
                 .build();
     }
-
     public static HttpResponse get302HttpResponse(HttpRequest httpRequest) {
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.FOUND)
                 .build();
     }
-
     //todo: step3 진행시 수정 예정
     public static HttpResponse get404HttpResponse(HttpRequest httpRequest) {
         byte[] body = HttpStatusCode.NOT_FOUND.getReasonPhrase().getBytes();

@@ -46,24 +46,4 @@ public class HttpRequestHeaderParser {
         requestHeaderMap.put("RequestUri", requestUri);
         requestHeaderMap.put("QueryString", queryString);
     }
-
-    //    public static Map<String, String> parse(String requestMessage){
-//        Map<String, String> requestHeaderMap = new HashMap<>();
-//        String[] lines = requestMessage.split("\r\n");
-//        parseRequestLine(lines[0], requestHeaderMap);
-//        for (int i = 1; i < lines.length; i++) {
-//            parseHeader(lines[i], requestHeaderMap);
-//        }
-//        return requestHeaderMap;
-//    }
-
-    //    private static void parseRequestLine(String requestLine, Map<String, String> requestHeaderMap){
-//        String[] fields = requestLine.split(" ");
-//        String method = fields[0];
-//        String uri = fields[1];
-//        String version = fields[2];
-//        requestHeaderMap.put("Method", method);
-//        requestHeaderMap.put("Version", version);
-//        putUriField(uri, requestHeaderMap);
-//    }
 }

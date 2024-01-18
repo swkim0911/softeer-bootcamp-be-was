@@ -2,8 +2,6 @@ package webserver.handler;
 
 import Http.HttpRequest;
 import Http.HttpResponse;
-import Http.builder.HttpResponseBuilder;
-import Http.status.HttpStatusCode;
 import util.FileUtils;
 import util.HttpResponseUtils;
 

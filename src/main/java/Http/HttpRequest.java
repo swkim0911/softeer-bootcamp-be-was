@@ -6,14 +6,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 public class HttpRequest {
-
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-
-    private String method;
-    private String uri;
-    private String queryString; // 없는 경우 none
-    private String version;
-    private Map<String, String> headerFields;
+    private final String method;
+    private final String uri;
+    private final String queryString; // 없는 경우 none
+    private final String version;
+    private final Map<String, String> headerFields;
 
     public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields) {
         this.method = method;

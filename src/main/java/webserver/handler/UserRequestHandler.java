@@ -10,13 +10,8 @@ import org.slf4j.LoggerFactory;
 import util.FileUtils;
 import util.HttpResponseUtils;
 import util.UserEntityConverter;
-import webserver.RequestController;
-
-import java.util.Collection;
 
 public class UserRequestHandler implements RequestHandler{
-
-    private static final Logger logger = LoggerFactory.getLogger(UserRequestHandler.class);
     private static final String path = "src/main/resources/templates";
     @Override
     public HttpResponse handle(HttpRequest httpRequest) {
@@ -35,5 +30,4 @@ public class UserRequestHandler implements RequestHandler{
         }
         return HttpResponseUtils.get404HttpResponse(httpRequest);
     }
-
 }

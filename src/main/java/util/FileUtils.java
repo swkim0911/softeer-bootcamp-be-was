@@ -17,7 +17,6 @@ public class FileUtils {
             return "파일을 찾을 수 없습니다.".getBytes();
         }
     }
-
     public static String getFileType(String uri) {
         int index = uri.lastIndexOf(".");
         return uri.substring(index+1);

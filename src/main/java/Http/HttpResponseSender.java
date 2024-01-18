@@ -27,13 +27,14 @@ public class HttpResponseSender {
     }
 
     private static void response200Header(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
+        byte[] body = httpResponse.getBody().get();
         dos.writeBytes("HTTP/1.1 200 OK \r\n");
         dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-        dos.writeBytes("Content-Length: " + httpResponse.getBody().length + "\r\n");
+        dos.writeBytes("Content-Length: " + body.length + "\r\n");
         dos.writeBytes("\r\n");
     }
 
     private static void responseBody(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
-        dos.write(httpResponse.getBody(), 0, httpResponse.getBody().length);
+        dos.write(httpResponse.getBody().get(), 0, httpResponse.getBody().get().length);
     }
 }

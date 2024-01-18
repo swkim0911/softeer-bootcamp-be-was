@@ -1,21 +1,20 @@
 package Http;
 
 import Http.status.HttpStatusCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.Optional;
 
 public class HttpResponse {
-    private String version;
-    private HttpStatusCode statusCode;
-    private String contentType;
-    private int contentLength;
-    private byte[] body;
+    private final String version;
+    private final HttpStatusCode statusCode;
+    private final Map<String, String> headerFields;
+    private final Optional<byte[]> body;
 
-    public HttpResponse(String version, HttpStatusCode statusCode, String contentType, int contentLength, byte[] body) {
+    public HttpResponse(String version, HttpStatusCode statusCode, Map<String, String> headerFields, Optional<byte[]> body) {
         this.version = version;
         this.statusCode = statusCode;
-        this.contentType = contentType;
-        this.contentLength = contentLength;
+        this.headerFields = headerFields;
         this.body = body;
     }
 
@@ -27,15 +26,11 @@ public class HttpResponse {
         return statusCode;
     }
 
-    public String getContentType() {
-        return contentType;
+    public Map<String, String> getHeaderFields() {
+        return headerFields;
     }
 
-    public int getContentLength() {
-        return contentLength;
-    }
-
-    public byte[] getBody() {
+    public Optional<byte[]> getBody() {
         return body;
     }
 }
