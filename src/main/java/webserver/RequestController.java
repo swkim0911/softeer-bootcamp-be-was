@@ -25,22 +25,11 @@ import webserver.handler.UserRequestHandler;
 
 public class RequestController implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
-    private final Map<String, RequestHandler> handlers = new HashMap<>();
     private final Socket connection;
-
     public RequestController(Socket connectionSocket){
         this.connection = connectionSocket;
     }
-    // handler 추가
-    public void initHandler() {
-        RequestHandler resourseRequestHandler = new HomeRequestHandler();
-        RequestHandler userRequestHandler = new UserRequestHandler();
-        handlers.put("/", resourseRequestHandler);
-        handlers.put("/index.html", resourseRequestHandler);
-        handlers.put("/user", userRequestHandler);
-    }
     public void run() {
-        initHandler();
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
@@ -53,25 +42,27 @@ public class RequestController implements Runnable {
     }
 
     public void handleRequest(HttpRequest httpRequest, OutputStream out) throws IOException {
-        RequestHandler handler = handlers.get(httpRequest.getUri());
-        HttpResponse httpResponse;
-        if (handler != null) {
-            httpResponse = handler.handle(httpRequest);
-            HttpResponseSender.send(httpResponse, out);
-            return;
+        String uri = httpRequest.getUri();
+        RequestHandler requestHandler;
+        if (uri.startsWith("/user")) {
+            requestHandler = new UserRequestHandler();
+        }else{
+            requestHandler = new HomeRequestHandler();
         }
-        //  잘못된 요청 - 404 보내기
-        logger.debug("not found:{}", httpRequest.getUri());
-
-        httpResponse = new HttpResponseBuilder()
-                .version(httpRequest.getVersion())
-                .status(HttpStatusCode.NOT_FOUND)
-                .contentType("text/html;charset=utf-8")
-                .contentLength(HttpStatusCode.NOT_FOUND.getReasonPhrase().length())
-                .body(HttpStatusCode.NOT_FOUND.getReasonPhrase().getBytes())
-                .build();
-
+        HttpResponse httpResponse = requestHandler.handle(httpRequest);
         HttpResponseSender.send(httpResponse, out);
+        //  잘못된 요청 - 404 보내기
+//        logger.debug("not found:{}", httpRequest.getUri());
+//
+//        httpResponse = new HttpResponseBuilder()
+//                .version(httpRequest.getVersion())
+//                .status(HttpStatusCode.NOT_FOUND)
+//                .contentType("text/html;charset=utf-8")
+//                .contentLength(HttpStatusCode.NOT_FOUND.getReasonPhrase().length())
+//                .body(HttpStatusCode.NOT_FOUND.getReasonPhrase().getBytes())
+//                .build();
+//
+//        HttpResponseSender.send(httpResponse, out);
 
     }
 

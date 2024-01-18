@@ -4,17 +4,10 @@ import Http.HttpRequest;
 import Http.HttpResponse;
 import Http.builder.HttpResponseBuilder;
 import Http.status.HttpStatusCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import util.FileUtils;
 
 public class HomeRequestHandler implements RequestHandler{
-
-    private static final Logger logger = LoggerFactory.getLogger(HomeRequestHandler.class);
-    private static final String path = "src/main/resources/templates/";
+    private static final String path = "src/main/resources/templates";
 
     @Override
     public HttpResponse handle(HttpRequest httpRequest) {
@@ -22,7 +15,16 @@ public class HomeRequestHandler implements RequestHandler{
         if (uri.equals("/")) {
             uri = "/index.html";
         }
-        byte[] body = readHtmlFile( path + uri);
+        // 파일 확장자가 html이면
+        String fileType = FileUtils.getFileType(uri);
+        if (fileType.equals("html")) {
+            return get200HttpResponse(httpRequest, uri);
+        }
+        return get404HttpResponse(httpRequest);
+    }
+
+    private static HttpResponse get200HttpResponse(HttpRequest httpRequest, String uri) {
+        byte[] body = FileUtils.readFile(path + uri);
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.OK)
@@ -32,13 +34,17 @@ public class HomeRequestHandler implements RequestHandler{
                 .build();
     }
 
-    private byte[] readHtmlFile(String fileName) {
-        // index.html 파일을 읽어서 바이트 배열로 반환
-        try {
-            return Files.readAllBytes(new File(fileName).toPath());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-            return HttpStatusCode.BAD_REQUEST.getReasonPhrase().getBytes(); //todo
-        }
+    //todo step3 진행시 수정 예정
+    private static HttpResponse get404HttpResponse(HttpRequest httpRequest) {
+        byte[] body = HttpStatusCode.NOT_FOUND.getReasonPhrase().getBytes();
+        return new HttpResponseBuilder()
+                .version(httpRequest.getVersion())
+                .status(HttpStatusCode.NOT_FOUND)
+                .contentType("text/html;charset=utf-8")
+                .contentLength(body.length)
+                .body(body)
+                .build();
     }
+
+
 }
