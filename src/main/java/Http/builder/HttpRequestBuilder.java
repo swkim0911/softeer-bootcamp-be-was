@@ -13,15 +13,7 @@ import static java.nio.charset.StandardCharsets.*;
 
 public class HttpRequestBuilder {
 
-
-
-    public static String getRequestMessage(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        return URLDecoder.decode(buildRequestMessage(br), UTF_8);
-    }
-
     private String method;
-    private String url;
     private String uri;
     private String queryString;
     private String version;
@@ -29,11 +21,6 @@ public class HttpRequestBuilder {
 
     public HttpRequestBuilder method(String method) {
         this.method = method;
-        return this;
-    }
-
-    public HttpRequestBuilder url(String url) {
-        this.url = url;
         return this;
     }
 
@@ -58,22 +45,6 @@ public class HttpRequestBuilder {
     }
 
     public HttpRequest build() {
-        return new HttpRequest(method, url, uri, queryString, version, headerFields);
-    }
-
-
-
-
-
-
-    private static String buildRequestMessage(BufferedReader br) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        String line = br.readLine();
-        sb.append(line).append("\r\n");
-        while (!line.isEmpty()) { //마지막 라인 = ""(empty)
-            line = br.readLine();
-            sb.append(line).append("\r\n");
-        }
-        return sb.toString().trim();
+        return new HttpRequest(method, uri, queryString, version, headerFields);
     }
 }

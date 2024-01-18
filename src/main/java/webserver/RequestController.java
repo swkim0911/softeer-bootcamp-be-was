@@ -3,7 +3,11 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
+import Http.HttpRequest;
+import Http.HttpRequestFactory;
 import Http.builder.HttpRequestBuilder;
 import Http.builder.HttpResponseBuilder;
 import db.Database;
@@ -13,23 +17,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestHeaderUtils;
 import util.UserEntityConverter;
+import webserver.handler.ResourseRequestHandler;
 
-public class Controller implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+public class RequestController implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
+    private Map<String, Object> handlers = new HashMap<>();
     private final Socket connection;
-    public Controller(Socket connectionSocket){
+
+    public RequestController(Socket connectionSocket){
         this.connection = connectionSocket;
     }
 
+    // handler 추가
+    public void initHandler() {
+        ResourseRequestHandler resourseRequestHandler = new ResourseRequestHandler();
+        handlers.put("/", resourseRequestHandler);
+    }
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
-
+        initHandler();
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            String requestMessage = HttpRequestBuilder.getRequestMessage(in);
-            HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
-            logHeaders(httpRequestHeaderUtils);
-            sendResponse(out, httpRequestHeaderUtils);
+            HttpRequest httpRequest = HttpRequestFactory.getRequestMessage(in);
+            httpRequest.logHeaders();
+//            sendResponse(out, httpRequestHeaderUtils);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -55,17 +66,6 @@ public class Controller implements Runnable {
         dos.flush();
     }
     // 필요한 헤더 출력
-    private static void logHeaders(HttpRequestHeaderUtils requestHeaderUtils){
-        logger.debug("Method: {}", requestHeaderUtils.getRequestMethod());
-        logger.debug("Request-Path: {}", requestHeaderUtils.getRequestUri());
-        logger.debug("Query-String: {}", requestHeaderUtils.getQueryString());
-        logger.debug("Version: {}", requestHeaderUtils.getRequestVersion());
-        logger.debug("User-Agent: {}", requestHeaderUtils.getRequestUserAgent());
-        logger.debug("Host: {}", requestHeaderUtils.getHost());
-        logger.debug("Accept: {}", requestHeaderUtils.getAccept());
-        logger.debug("Cookie: {}", requestHeaderUtils.getCookie());
-    }
-
     private byte[] readHtmlFile(String fileName) throws IOException {
         // index.html 파일을 읽어서 바이트 배열로 반환
         return Files.readAllBytes(new File(fileName).toPath());

@@ -32,7 +32,7 @@ public class WebServer {
     private static void listen(ServerSocket listenSocket, ExecutorService executor) throws IOException {
         Socket connection;
         while ((connection = listenSocket.accept()) != null) {
-            Runnable worker = new Controller(connection);
+            Runnable worker = new RequestController(connection);
             executor.execute(worker);
         }
     }
