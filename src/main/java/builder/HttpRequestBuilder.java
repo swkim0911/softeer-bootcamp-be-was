@@ -1,4 +1,4 @@
-package Http.builder;
+package builder;
 
 import Http.HttpRequest;
 

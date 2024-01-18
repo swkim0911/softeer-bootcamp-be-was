@@ -1,4 +1,4 @@
-package Http.builder;
+package builder;
 
 import Http.HttpResponse;
 import Http.status.HttpStatusCode;

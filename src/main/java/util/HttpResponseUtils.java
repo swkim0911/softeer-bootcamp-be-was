@@ -2,7 +2,7 @@ package util;
 
 import Http.HttpRequest;
 import Http.HttpResponse;
-import Http.builder.HttpResponseBuilder;
+import builder.HttpResponseBuilder;
 import Http.status.HttpStatusCode;
 
 import java.util.HashMap;
