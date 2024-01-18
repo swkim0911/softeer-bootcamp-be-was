@@ -14,15 +14,11 @@ public class HttpResponseSender {
     public static void send(HttpResponse httpResponse, OutputStream out) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
         HttpStatusCode statusCode = httpResponse.getStatusCode();
-        if (statusCode == OK) {
-            responseHeader(dos, httpResponse);
-            responseBody(dos, httpResponse);
-        } else if (statusCode == FOUND) {
-            responseHeader(dos, httpResponse);
-        } else if(statusCode == NOT_FOUND){
-            responseHeader(dos, httpResponse);
+        responseHeader(dos, httpResponse);
+        if (statusCode == OK || statusCode == NOT_FOUND) { // 상태 코드가 200, 404인 경우 body가 포함된다.
             responseBody(dos, httpResponse);
         }
+        // 상태 코드가 302인 경우 body는 포함되지 않는다.
         dos.flush();
     }
     private static void responseHeader(DataOutputStream dos, HttpResponse httpResponse) throws IOException {

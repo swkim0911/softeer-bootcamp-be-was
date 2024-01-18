@@ -27,14 +27,6 @@ public class HttpResponseUtils {
                 .headerFields(headerFields)
                 .build();
     }
-
-    private static Map<String, String> setHeaderFieldsWhen300Code() {
-        Map<String, String> headerFields = new HashMap<>();
-        headerFields.put("Content-Type", "text/html;charset=utf-8");
-        headerFields.put("Location", "/index.html");
-        return headerFields;
-    }
-
     public static HttpResponse get404HttpResponse(HttpRequest httpRequest, byte[] body) {
         Map<String, String> headerFields = setHeaderFieldsWhen200And400Code(body);
         return new HttpResponseBuilder()
@@ -49,6 +41,13 @@ public class HttpResponseUtils {
         Map<String, String> headerFields = new HashMap<>();
         headerFields.put("Content-Type", "text/html;charset=utf-8");
         headerFields.put("Content-Length", String.valueOf(body.length));
+        return headerFields;
+    }
+
+    private static Map<String, String> setHeaderFieldsWhen300Code() {
+        Map<String, String> headerFields = new HashMap<>();
+        headerFields.put("Content-Type", "text/html;charset=utf-8");
+        headerFields.put("Location", "/index.html");
         return headerFields;
     }
 }
