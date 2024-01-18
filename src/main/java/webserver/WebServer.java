@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.RequestHandler;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
@@ -33,7 +32,7 @@ public class WebServer {
     private static void listen(ServerSocket listenSocket, ExecutorService executor) throws IOException {
         Socket connection;
         while ((connection = listenSocket.accept()) != null) {
-            Runnable worker = new RequestHandler(connection);
+            Runnable worker = new Controller(connection);
             executor.execute(worker);
         }
     }

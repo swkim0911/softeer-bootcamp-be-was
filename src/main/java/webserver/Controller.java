@@ -1,4 +1,4 @@
-package webserver.handler;
+package webserver;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import util.HttpRequestHeaderUtils;
 import util.UserEntityConverter;
 
-public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+public class Controller implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final Socket connection;
-    public RequestHandler(Socket connectionSocket){
+    public Controller(Socket connectionSocket){
         this.connection = connectionSocket;
     }
 
@@ -26,9 +26,6 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-
-
-
             String requestMessage = HttpRequestBuilder.getRequestMessage(in);
             HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
             logHeaders(httpRequestHeaderUtils);
