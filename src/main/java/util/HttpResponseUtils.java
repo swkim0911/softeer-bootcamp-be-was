@@ -4,13 +4,14 @@ import Http.HttpRequest;
 import Http.HttpResponse;
 import builder.HttpResponseBuilder;
 import Http.status.HttpStatusCode;
+import util.mapper.ContentTypeMapper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponseUtils {
     public static HttpResponse get200HttpResponse(HttpRequest httpRequest, byte[] body) {
-        Map<String, String> headerFields = setHeaderFieldsWhen200And400Code(body);
+        Map<String, String> headerFields = setHeaderFieldsWhen200And400Code(httpRequest, body);
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.OK)
@@ -28,7 +29,7 @@ public class HttpResponseUtils {
                 .build();
     }
     public static HttpResponse get404HttpResponse(HttpRequest httpRequest, byte[] body) {
-        Map<String, String> headerFields = setHeaderFieldsWhen200And400Code(body);
+        Map<String, String> headerFields = setHeaderFieldsWhen200And400Code(httpRequest, body);
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.NOT_FOUND)
@@ -37,9 +38,13 @@ public class HttpResponseUtils {
                 .build();
     }
 
-    private static Map<String, String> setHeaderFieldsWhen200And400Code(byte[] body) {
+    private static Map<String, String> setHeaderFieldsWhen200And400Code(HttpRequest httpRequest, byte[] body) {
         Map<String, String> headerFields = new HashMap<>();
-        headerFields.put("Content-Type", "text/html;charset=utf-8");
+        String uri = httpRequest.getUri();
+        int index = uri.lastIndexOf(".");
+        String type = uri.substring(index + 1);
+        String contentType = ContentTypeMapper.contentTypeMap.get(type);
+        headerFields.put("Content-Type", contentType+";charset=utf-8");
         headerFields.put("Content-Length", String.valueOf(body.length));
         return headerFields;
     }

@@ -43,7 +43,6 @@ public class HttpRequestHeaderParser {
         String[] lines = requestMessage.split("\r\n");
         String requestLine = lines[0];
         return requestLine.split(" ");
-
     }
 
     private static void putUriField(String uri, Map<String, String> requestHeaderMap) {
