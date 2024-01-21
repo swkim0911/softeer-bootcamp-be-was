@@ -1,10 +1,8 @@
 package handler;
 
-import exception.ResourceNotFoundException;
 import http.HttpRequest;
 import http.HttpResponse;
 import util.FileUtils;
-import util.HttpRequestHeaderUtils;
 import util.HttpResponseUtils;
 
 import java.util.Optional;
