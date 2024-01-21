@@ -1,6 +1,5 @@
 package util;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class HttpRequestHeaderUtils {
@@ -9,7 +8,7 @@ public class HttpRequestHeaderUtils {
     private HttpRequestHeaderUtils() {
     }
 
-    public static HttpRequestHeaderUtils createHeaderUtils(String requestMessage) throws IOException {
+    public static HttpRequestHeaderUtils createHeaderUtils(String requestMessage){
         HttpRequestHeaderUtils httpRequestHeaderUtils = new HttpRequestHeaderUtils();
         httpRequestHeaderUtils.requestLineMap = HttpRequestHeaderParser.parseRequestLine(requestMessage);
         httpRequestHeaderUtils.requestHeaderMap = HttpRequestHeaderParser.parseHeaders(requestMessage);

@@ -43,7 +43,7 @@ public class HttpRequest {
 
     public void logHeaders(){
         StringBuilder sb = new StringBuilder();
-        sb.append("\nMethod: ").append(method).append("\n");
+        sb.append("\n").append("Method: ").append(method).append("\n");
         sb.append("Uri: ").append(uri).append("\n");
         sb.append("Query-String: ").append(queryString).append("\n");
         sb.append("Version: ").append(version).append("\n");
@@ -51,13 +51,5 @@ public class HttpRequest {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
         logger.debug("{}", sb);
-
-//        logger.debug("Method: {}", method);
-//        logger.debug("Uri: {}", uri);
-//        logger.debug("Query-String: {}", queryString);
-//        logger.debug("Version: {}", version);
-//        logger.debug("Host: {}", headerFields.get("Host"));
-//        logger.debug("User-Agent: {}", headerFields.get("User-Agent"));
-//        logger.debug("Accept: {}", headerFields.get("Accept"));
     }
 }

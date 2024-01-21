@@ -1,4 +1,4 @@
-package webserver.handler;
+package handler;
 
 import Http.HttpRequest;
 import Http.HttpResponse;
@@ -7,7 +7,6 @@ import model.User;
 import util.HttpResponseUtils;
 import util.QueryStringParser;
 
-import java.util.Collection;
 import java.util.Map;
 
 

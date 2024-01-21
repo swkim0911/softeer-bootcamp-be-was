@@ -1,4 +1,4 @@
-package webserver.handler;
+package handler;
 
 import Http.HttpRequest;
 import Http.HttpResponse;

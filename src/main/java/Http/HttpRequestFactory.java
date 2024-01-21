@@ -13,7 +13,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HttpRequestFactory {
 
-    public static HttpRequest getRequestMessage(InputStream in) throws IOException {
+    public static HttpRequest getRequest(InputStream in) throws IOException {
         String requestMessage = URLDecoder.decode(getStringRequestMessage(in), UTF_8);
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 

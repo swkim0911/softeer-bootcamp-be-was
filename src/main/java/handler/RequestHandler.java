@@ -1,4 +1,4 @@
-package webserver.handler;
+package handler;
 
 import Http.HttpRequest;
 import Http.HttpResponse;
@@ -12,7 +12,7 @@ public interface RequestHandler {
     public HttpResponse handle(HttpRequest httpRequest);
 
     default HttpResponse getHttpResponse(HttpRequest httpRequest, String uri) {
-        Optional<byte[]> body = FileUtils.readFile(httpRequest, uri);
+        Optional<byte[]> body = FileUtils.readFile(uri);
         if (body.isPresent()) {
             return HttpResponseUtils.get200HttpResponse(httpRequest, body.get());
         }
