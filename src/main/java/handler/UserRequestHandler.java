@@ -1,6 +1,5 @@
 package handler;
 
-import exception.ResourceNotFoundException;
 import http.HttpRequest;
 import http.HttpResponse;
 import db.Database;
@@ -12,7 +11,6 @@ import java.util.Map;
 
 
 public class UserRequestHandler implements RequestHandler{
-    private static final String path = "src/main/resources/templates";
     @Override
     public HttpResponse handle(HttpRequest httpRequest){
         String uri = httpRequest.getUri();
@@ -25,5 +23,4 @@ public class UserRequestHandler implements RequestHandler{
         }
         return getHttpResponse(httpRequest, uri);
     }
-
 }

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
@@ -43,7 +42,7 @@ public class HttpRequestHeaderUtilsTest {
 
     @Test
     @DisplayName("요청 메서드 테스트")
-    void 요청_메서드_테스트() throws IOException {
+    void 요청_메서드_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
@@ -56,7 +55,7 @@ public class HttpRequestHeaderUtilsTest {
 
     @Test
     @DisplayName("요청 uri 테스트")
-    void 요청_URI_테스트() throws IOException {
+    void 요청_URI_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
@@ -69,7 +68,7 @@ public class HttpRequestHeaderUtilsTest {
 
     @Test
     @DisplayName("쿼리 스트링 있는 경우 테스트")
-    void 쿼리_스트링_O_테스트() throws IOException {
+    void 쿼리_스트링_O_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
@@ -81,7 +80,7 @@ public class HttpRequestHeaderUtilsTest {
     }
     @Test
     @DisplayName("쿼리 스트링 없는 경우 테스트")
-    void 쿼리_스트링_X_테스트() throws IOException {
+    void 쿼리_스트링_X_테스트(){
         //given
         requestMessage = getNoQueryStringRequestMessage();
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
@@ -94,7 +93,7 @@ public class HttpRequestHeaderUtilsTest {
     }
     @Test
     @DisplayName("프로토콜 버전 테스트")
-    void 프로토콜_버전_테스트() throws IOException {
+    void 프로토콜_버전_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
@@ -107,7 +106,7 @@ public class HttpRequestHeaderUtilsTest {
 
     @Test
     @DisplayName("Host 필드 테스트")
-    void Host_필드_테스트() throws IOException {
+    void Host_필드_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
@@ -121,7 +120,7 @@ public class HttpRequestHeaderUtilsTest {
 
     @Test
     @DisplayName("User-Agent 필드 테스트")
-    void User_Agent_필드_테스트() throws IOException {
+    void User_Agent_필드_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
@@ -135,7 +134,7 @@ public class HttpRequestHeaderUtilsTest {
 
     @Test
     @DisplayName("Accept 필드 테스트")
-    void Accept_필드_테스트() throws IOException {
+    void Accept_필드_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 
@@ -149,7 +148,7 @@ public class HttpRequestHeaderUtilsTest {
 
     @Test
     @DisplayName("Cookie 필드 테스트")
-    void Cookie_필드_테스트() throws IOException {
+    void Cookie_필드_테스트(){
         //given
         HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestMessage);
 

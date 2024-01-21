@@ -9,7 +9,9 @@ public class HttpResponse {
     private final String version;
     private final HttpStatusCode statusCode;
     private final Map<String, String> headerFields;
-    private final Optional<byte[]> body; //todo optional 로 하지 않고 스트링으로 하기. body 없으면 ""(empty)
+    private final Optional<byte[]> body; //todo optional 로 하지 않고 스트링으로 하기. body 없으면 ""(empty) -> 예외처리 부분도 수장(runtime -> 체크 예외)
+	//todo http request, response가 잘 만들어지는지 확인하는 테스트
+
 
     public HttpResponse(String version, HttpStatusCode statusCode, Map<String, String> headerFields, Optional<byte[]> body) {
         this.version = version;
