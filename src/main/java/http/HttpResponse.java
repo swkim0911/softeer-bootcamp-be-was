@@ -1,6 +1,6 @@
-package Http;
+package http;
 
-import Http.status.HttpStatusCode;
+import http.status.HttpStatusCode;
 
 import java.util.Map;
 import java.util.Optional;
@@ -9,7 +9,7 @@ public class HttpResponse {
     private final String version;
     private final HttpStatusCode statusCode;
     private final Map<String, String> headerFields;
-    private final Optional<byte[]> body;
+    private final Optional<byte[]> body; //todo optional 로 하지 않고 스트링으로 하기. body 없으면 ""(empty)
 
     public HttpResponse(String version, HttpStatusCode statusCode, Map<String, String> headerFields, Optional<byte[]> body) {
         this.version = version;

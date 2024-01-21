@@ -1,13 +1,13 @@
-package Http;
+package http;
 
-import Http.status.HttpStatusCode;
+import http.status.HttpStatusCode;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
 
-import static Http.status.HttpStatusCode.*;
+import static http.status.HttpStatusCode.*;
 
 public class HttpResponseSender {
 

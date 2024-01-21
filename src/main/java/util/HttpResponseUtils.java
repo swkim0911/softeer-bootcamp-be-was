@@ -1,9 +1,9 @@
 package util;
 
-import Http.HttpRequest;
-import Http.HttpResponse;
-import builder.HttpResponseBuilder;
-import Http.status.HttpStatusCode;
+import http.HttpRequest;
+import http.HttpResponse;
+import http.builder.HttpResponseBuilder;
+import http.status.HttpStatusCode;
 import util.mapper.ContentTypeMapper;
 
 import java.util.HashMap;

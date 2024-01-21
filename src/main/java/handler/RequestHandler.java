@@ -1,8 +1,10 @@
 package handler;
 
-import Http.HttpRequest;
-import Http.HttpResponse;
+import exception.ResourceNotFoundException;
+import http.HttpRequest;
+import http.HttpResponse;
 import util.FileUtils;
+import util.HttpRequestHeaderUtils;
 import util.HttpResponseUtils;
 
 import java.util.Optional;
@@ -11,7 +13,7 @@ import java.util.Optional;
 public interface RequestHandler {
     HttpResponse handle(HttpRequest httpRequest);
 
-    default HttpResponse getHttpResponse(HttpRequest httpRequest, String uri) {
+    default HttpResponse getHttpResponse(HttpRequest httpRequest, String uri){
         Optional<byte[]> body = FileUtils.readFile(uri);
         if (body.isPresent()) {
             return HttpResponseUtils.get200HttpResponse(httpRequest, body.get());

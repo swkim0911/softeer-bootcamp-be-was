@@ -1,7 +1,8 @@
 package handler;
 
-import Http.HttpRequest;
-import Http.HttpResponse;
+import exception.ResourceNotFoundException;
+import http.HttpRequest;
+import http.HttpResponse;
 import db.Database;
 import model.User;
 import util.HttpResponseUtils;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class UserRequestHandler implements RequestHandler{
     private static final String path = "src/main/resources/templates";
     @Override
-    public HttpResponse handle(HttpRequest httpRequest) {
+    public HttpResponse handle(HttpRequest httpRequest){
         String uri = httpRequest.getUri();
         if (uri.equals("/user/create")) {
             Map<String, String> parameters = QueryStringParser.getParameters(httpRequest.getQueryString());

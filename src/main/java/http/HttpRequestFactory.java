@@ -1,6 +1,6 @@
-package Http;
+package http;
 
-import builder.HttpRequestBuilder;
+import http.builder.HttpRequestBuilder;
 import util.HttpRequestHeaderUtils;
 
 import java.io.BufferedReader;

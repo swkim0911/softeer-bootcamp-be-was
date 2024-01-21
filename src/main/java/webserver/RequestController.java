@@ -3,10 +3,10 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 
-import Http.HttpRequest;
-import Http.HttpRequestFactory;
-import Http.HttpResponse;
-import Http.HttpResponseSender;
+import http.HttpRequest;
+import http.HttpRequestFactory;
+import http.HttpResponse;
+import http.HttpResponseSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import handler.RequestHandler;
