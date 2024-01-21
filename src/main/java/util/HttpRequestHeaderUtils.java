@@ -1,40 +1,36 @@
 package util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 public class HttpRequestHeaderUtils {
-    private Map<String, String> requestHeaderMap;
+    private Map<String, String> requestHeaderMap; // 헤더 <field, value> 저장
+    private Map<String, String> requestLineMap;
     private HttpRequestHeaderUtils() {
     }
 
     public static HttpRequestHeaderUtils createHeaderUtils(String requestMessage) throws IOException {
         HttpRequestHeaderUtils httpRequestHeaderUtils = new HttpRequestHeaderUtils();
-        httpRequestHeaderUtils.requestHeaderMap = HttpRequestHeaderParser.parse(requestMessage);
+        httpRequestHeaderUtils.requestLineMap = HttpRequestHeaderParser.parseRequestLine(requestMessage);
+        httpRequestHeaderUtils.requestHeaderMap = HttpRequestHeaderParser.parseHeaders(requestMessage);
         return httpRequestHeaderUtils;
     }
 
     public String getRequestMethod() {
-        return requestHeaderMap.get("Method");
+        return requestLineMap.get("Method");
     }
     public String getRequestUri() {
-        return requestHeaderMap.get("RequestUri");
+        return requestLineMap.get("RequestUri");
+    }
+    public String getQueryString() {
+        return  requestLineMap.get("QueryString");
     }
     public String getRequestVersion() {
-        return requestHeaderMap.get("Version");
+        return requestLineMap.get("Version");
     }
-    public String getRequestUserAgent() {
-        return requestHeaderMap.get("User-Agent");
+    public Map<String,String> getRequestHeaders() {
+        return requestHeaderMap;
     }
-    public String getHost() {
-        return requestHeaderMap.get("Host");
-    }
-    public String getCookie() {
-        return requestHeaderMap.get("Cookie");
-    }
-    public String getAccept() {
-        return requestHeaderMap.get("Accept");
-    }
+
+
 }

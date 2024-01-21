@@ -1,10 +1,16 @@
 package model;
 
+import java.util.Map;
+
 public class User {
     private String userId;
     private String password;
     private String name;
     private String email;
+
+    public static User create(Map<String, String> parameters) {
+        return new User(parameters.get("userId"), parameters.get("password"), parameters.get("name"), parameters.get("email"));
+    }
 
     public User(String userId, String password, String name, String email) {
         this.userId = userId;

@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
-
     public static void main(String[] args) throws Exception{
         int port = initPort(args);
         // 쓰레드 풀 생성
@@ -32,7 +31,7 @@ public class WebServer {
     private static void listen(ServerSocket listenSocket, ExecutorService executor) throws IOException {
         Socket connection;
         while ((connection = listenSocket.accept()) != null) {
-            Runnable worker = new RequestHandler(connection);
+            Runnable worker = new RequestController(connection);
             executor.execute(worker);
         }
     }
