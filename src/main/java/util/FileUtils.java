@@ -24,13 +24,4 @@ public class FileUtils {
             return Optional.empty();
         }
     }
-    //todo readFile 함수와 로직이 이제 비슷하니까 함수로 묶기
-    public static Optional<byte[]> read404File(String uri) {
-        try {
-            return Optional.of(Files.readAllBytes(new File(htmlPath + uri).toPath()));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-            return Optional.empty();
-        }
-    }
 }

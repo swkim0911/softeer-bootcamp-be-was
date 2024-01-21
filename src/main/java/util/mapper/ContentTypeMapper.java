@@ -11,5 +11,6 @@ public class ContentTypeMapper {
         contentTypeMap.put("css", "text/css");
         contentTypeMap.put("woff", "font/woff");
         contentTypeMap.put("ttf", "font/ttf");
+        contentTypeMap.put("ico", "image/x-icon");
     }
 }

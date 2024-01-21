@@ -30,6 +30,4 @@ public class HttpRequestHeaderUtils {
     public Map<String,String> getRequestHeaders() {
         return requestHeaderMap;
     }
-
-
 }

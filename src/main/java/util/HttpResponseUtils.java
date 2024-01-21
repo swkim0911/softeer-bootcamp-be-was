@@ -42,7 +42,7 @@ public class HttpResponseUtils {
         Map<String, String> headerFields = new HashMap<>();
         String fileType = UriParser.getFileType(httpRequest.getUri());
         String contentType = ContentTypeMapper.contentTypeMap.get(fileType);
-        headerFields.put("Content-Type", contentType+";charset=utf-8");
+        headerFields.put("Content-Type", contentType + ";charset=utf-8");
         headerFields.put("Content-Length", String.valueOf(body.length));
         return headerFields;
     }
