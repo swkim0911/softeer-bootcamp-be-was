@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.Optional;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
@@ -13,9 +12,9 @@ public class HttpRequest {
     private final String queryString; // 없는 경우 None
     private final String version;
     private final Map<String, String> headerFields;
-	private final Optional<String> body;
+	private final String body; // 없는 경우 "" (empty)
 
-    public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields, Optional<String> body) {
+    public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields, String body) {
         this.method = method;
         this.uri = uri;
         this.queryString = queryString;
@@ -44,7 +43,7 @@ public class HttpRequest {
         return headerFields;
     }
 
-	public Optional<String> getBody() {
+	public String getBody() {
 		return body;
 	}
 
@@ -57,7 +56,7 @@ public class HttpRequest {
         for (Map.Entry<String, String> entry : headerFields.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
-		sb.append("Body: ").append(body.orElse(""));
+		sb.append("Body: ").append(body);
 		logger.debug("{}", sb.toString().trim());
 
 	}

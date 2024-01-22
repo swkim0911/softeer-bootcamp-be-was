@@ -3,7 +3,6 @@ package http.builder;
 import http.HttpRequest;
 
 import java.util.Map;
-import java.util.Optional;
 
 public class HttpRequestBuilder {
 
@@ -12,7 +11,7 @@ public class HttpRequestBuilder {
     private String queryString;
     private String version;
     private Map<String, String> headerFields;
-	private Optional<String> body;
+	private String body;
 
     public HttpRequestBuilder method(String method) {
         this.method = method;
@@ -40,7 +39,7 @@ public class HttpRequestBuilder {
     }
 
 	public HttpRequestBuilder body(String body) {
-		this.body = Optional.ofNullable(body);
+		this.body = body;
 		return this;
 	}
     public HttpRequest build() {

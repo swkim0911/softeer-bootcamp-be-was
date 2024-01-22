@@ -25,7 +25,6 @@ public class HttpResponseSender {
         dos.writeBytes(httpResponse.getResponseHeader());
     }
 
-
     private static void responseBody(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
         Optional<byte[]> body = httpResponse.getBody();
         if (body.isPresent()) {
