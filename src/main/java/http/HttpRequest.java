@@ -13,7 +13,6 @@ public class HttpRequest {
     private final String queryString; // 없는 경우 None
     private final String version;
     private final Map<String, String> headerFields;
-
 	private final Optional<String> body;
 
     public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields, Optional<String> body) {
@@ -58,6 +57,7 @@ public class HttpRequest {
         for (Map.Entry<String, String> entry : headerFields.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
-        logger.debug("{}", sb);
-    }
+		logger.debug("{}", sb.toString().trim());
+
+	}
 }

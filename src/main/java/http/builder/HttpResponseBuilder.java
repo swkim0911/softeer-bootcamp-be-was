@@ -26,7 +26,7 @@ public class HttpResponseBuilder {
     }
 
     public HttpResponseBuilder body(byte[] body) {
-        this.body = Optional.of(body);
+        this.body = Optional.ofNullable(body);
         return this;
     }
 

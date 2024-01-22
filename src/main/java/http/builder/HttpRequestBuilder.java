@@ -40,7 +40,7 @@ public class HttpRequestBuilder {
     }
 
 	public HttpRequestBuilder body(String body) {
-		this.body = Optional.of(body);
+		this.body = Optional.ofNullable(body);
 		return this;
 	}
     public HttpRequest build() {
