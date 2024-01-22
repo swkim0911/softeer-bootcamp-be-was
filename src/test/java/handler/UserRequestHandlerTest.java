@@ -8,6 +8,8 @@ import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.*;
 
 class UserRequestHandlerTest {
@@ -17,11 +19,12 @@ class UserRequestHandlerTest {
 	void 회원가입시_db_저장() {
 		//given
 		RequestHandler requestHandler = new UserRequestHandler();
+		String body = "userId=hello&password=sdd&name=swk&email=test@naver.com";
 		HttpRequest httpRequest = new HttpRequestBuilder()
-			.method("GET")
+			.method("POST")
 			.uri("/user/create")
-			.queryString("userId=hello&password=sdd&name=swk&email=test@naver.com")
 			.version("HTTP/1.1")
+			.body(body)
 			.build();
 
 		//when

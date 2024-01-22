@@ -30,12 +30,13 @@ public class HttpRequestHeaderUtilsTest {
 
     private String getNoQueryStringRequestMessage() {
         StringBuilder sb = new StringBuilder();
-        sb.append("GET /index.html HTTP/1.1").append("\r\n");
+        sb.append("GET /user/create HTTP/1.1").append("\r\n");
         sb.append("Host: localhost:8080").append("\r\n");
         sb.append("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8").append("\r\n");
         sb.append("User-Agent: Mozilla/4.0(compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; InfoPath.1)").append("\r\n");
         sb.append("Cookie: Idea-14db9320=4d059d9c-532a-48d2-8ebe-3a46dcd4402f").append("\r\n");
         sb.append("\r\n");
+		sb.append("userId=hello&password=asd&name=swk&email=test@naver.com");
 
         return sb.toString();
     }
