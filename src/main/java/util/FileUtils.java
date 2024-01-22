@@ -3,9 +3,10 @@ package util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Optional;
 
 public class FileUtils {
@@ -16,12 +17,25 @@ public class FileUtils {
         String fileType = UriParser.getFileType(uri);
         try {
             if (fileType.equals("html")) {
-                return Optional.of(Files.readAllBytes(new File(htmlPath + uri).toPath()));
+                return Optional.of(readFileBytes(htmlPath + uri));
             }
-            return Optional.of(Files.readAllBytes(new File(resourcePath + uri).toPath()));
+			return Optional.of(readFileBytes(resourcePath + uri));
         } catch (IOException e) {
             logger.error(e.getMessage());
             return Optional.empty();
         }
     }
+
+	private static byte[] readFileBytes(String filePath) throws IOException {
+		File file = new File(filePath);
+		try (FileInputStream fis = new FileInputStream(file); ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+
+			while ((bytesRead = fis.read(buffer)) != -1) {
+				bos.write(buffer, 0, bytesRead); //bos에 buffer에서 읽은 만큼 쓰기
+			}
+			return bos.toByteArray();
+		}
+	}
 }
