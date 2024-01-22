@@ -20,11 +20,11 @@ public class HttpResponseUtils {
                 .build();
     }
 
-    public static HttpResponse get302HttpResponse(HttpRequest httpRequest) {
+    public static HttpResponse get302HttpResponse(HttpStatusCode statusCode, String version) {
         Map<String, String> headerFields = setRedirectionHeader();
         return new HttpResponseBuilder()
-                .version(httpRequest.getVersion())
-                .status(HttpStatusCode.FOUND)
+                .version(version)
+                .status(statusCode)
                 .headerFields(headerFields)
 				.body(new byte[0])
                 .build();
