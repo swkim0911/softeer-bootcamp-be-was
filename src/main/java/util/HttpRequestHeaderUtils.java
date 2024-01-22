@@ -8,10 +8,10 @@ public class HttpRequestHeaderUtils {
     private HttpRequestHeaderUtils() {
     }
 
-    public static HttpRequestHeaderUtils createHeaderUtils(String requestMessage){
+    public static HttpRequestHeaderUtils createHeaderUtils(String requestHeader){
         HttpRequestHeaderUtils httpRequestHeaderUtils = new HttpRequestHeaderUtils();
-        httpRequestHeaderUtils.requestLineMap = HttpRequestHeaderParser.parseRequestLine(requestMessage);
-        httpRequestHeaderUtils.requestHeaderMap = HttpRequestHeaderParser.parseHeaders(requestMessage);
+        httpRequestHeaderUtils.requestLineMap = HttpRequestHeaderParser.parseRequestLine(requestHeader);
+        httpRequestHeaderUtils.requestHeaderMap = HttpRequestHeaderParser.parseHeaders(requestHeader);
         return httpRequestHeaderUtils;
     }
 
