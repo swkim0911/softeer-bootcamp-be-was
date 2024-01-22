@@ -1,6 +1,6 @@
-package builder;
+package http.builder;
 
-import Http.HttpRequest;
+import http.HttpRequest;
 
 import java.util.Map;
 public class HttpRequestBuilder {

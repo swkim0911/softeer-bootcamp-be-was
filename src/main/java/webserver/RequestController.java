@@ -3,15 +3,15 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 
-import Http.HttpRequest;
-import Http.HttpRequestFactory;
-import Http.HttpResponse;
-import Http.HttpResponseSender;
+import http.HttpRequest;
+import http.HttpRequestFactory;
+import http.HttpResponse;
+import http.HttpResponseSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.RequestHandler;
-import webserver.handler.HomeRequestHandler;
-import webserver.handler.UserRequestHandler;
+import handler.RequestHandler;
+import handler.HomeRequestHandler;
+import handler.UserRequestHandler;
 
 public class RequestController implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
@@ -22,8 +22,9 @@ public class RequestController implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
+
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequestFactory.getRequestMessage(in);
+            HttpRequest httpRequest = HttpRequestFactory.getRequest(in);
             httpRequest.logHeaders();
             handleRequest(httpRequest, out);
         } catch (IOException e) {

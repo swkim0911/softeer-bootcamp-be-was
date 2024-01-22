@@ -1,6 +1,6 @@
-package Http;
+package http;
 
-import Http.status.HttpStatusCode;
+import http.status.HttpStatusCode;
 
 import java.util.Map;
 import java.util.Optional;

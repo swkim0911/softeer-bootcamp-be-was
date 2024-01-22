@@ -11,9 +11,14 @@ import java.util.Optional;
 public class FileUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
     private static final String htmlPath = "src/main/resources/templates";
+    private static final String resourcePath = "src/main/resources/static";
     public static Optional<byte[]> readFile(String uri) {
+        String fileType = UriParser.getFileType(uri);
         try {
-            return Optional.of(Files.readAllBytes(new File(htmlPath + uri).toPath()));
+            if (fileType.equals("html")) {
+                return Optional.of(Files.readAllBytes(new File(htmlPath + uri).toPath()));
+            }
+            return Optional.of(Files.readAllBytes(new File(resourcePath + uri).toPath()));
         } catch (IOException e) {
             logger.error(e.getMessage());
             return Optional.empty();

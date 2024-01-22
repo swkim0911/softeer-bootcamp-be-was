@@ -1,12 +1,12 @@
-package webserver.handler;
+package handler;
 
-import Http.HttpRequest;
-import Http.HttpResponse;
+import http.HttpRequest;
+import http.HttpResponse;
 
 
 public class HomeRequestHandler implements RequestHandler{
     @Override
-    public HttpResponse handle(HttpRequest httpRequest) {
+    public HttpResponse handle(HttpRequest httpRequest){
         String uri = httpRequest.getUri();
         if (uri.equals("/")) {
             uri = "/index.html";

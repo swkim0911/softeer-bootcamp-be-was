@@ -4,20 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestHeaderParser {
-    public static Map<String, String> parseHeaders(String requestMessage){
-        Map<String, String> requestHeaderMap = new HashMap<>();
-        String[] lines = requestMessage.split("\r\n");
-        for (int i = 1; i < lines.length; i++) {
-            String requestHeader = lines[i];
-            String[] header = requestHeader.split(":", 2);
-            if (header.length > 1) {
-                String field = header[0];
-                String value = header[1].stripLeading();
-                requestHeaderMap.put(field, value);
-            }
-        }
-        return requestHeaderMap;
-    }
 
     public static Map<String, String> parseRequestLine(String requestMessage){
         Map<String, String> requestLineMap = new HashMap<>();
@@ -28,7 +14,20 @@ public class HttpRequestHeaderParser {
         putUriField(uri, requestLineMap);
         return requestLineMap;
     }
-
+    public static Map<String, String> parseHeaders(String requestMessage){
+        Map<String, String> requestHeaderMap = new HashMap<>();
+        String[] lines = requestMessage.split("\r\n");
+        for (int i = 1; i < lines.length; i++) {
+            String headerLine = lines[i];
+            String[] header = headerLine.split(":", 2);
+            if (header.length > 1) {
+                String field = header[0];
+                String value = header[1].stripLeading();
+                requestHeaderMap.put(field, value);
+            }
+        }
+        return requestHeaderMap;
+    }
     private static void putVersionField(String[] splitRequestLine, Map<String, String> requestLineMap) {
         String version = splitRequestLine[2];
         requestLineMap.put("Version", version);
@@ -43,7 +42,6 @@ public class HttpRequestHeaderParser {
         String[] lines = requestMessage.split("\r\n");
         String requestLine = lines[0];
         return requestLine.split(" ");
-
     }
 
     private static void putUriField(String uri, Map<String, String> requestHeaderMap) {

@@ -1,7 +1,7 @@
-package builder;
+package http.builder;
 
-import Http.HttpResponse;
-import Http.status.HttpStatusCode;
+import http.HttpResponse;
+import http.status.HttpStatusCode;
 
 import java.util.Map;
 import java.util.Optional;
