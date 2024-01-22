@@ -25,7 +25,7 @@ public class RequestController implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			HttpRequest httpRequest = HttpRequestFactory.getRequest(in);
-            httpRequest.logHeaders();
+			httpRequest.logHeaders();
             handleRequest(httpRequest, out);
         } catch (IOException e) {
             logger.error(e.getMessage());

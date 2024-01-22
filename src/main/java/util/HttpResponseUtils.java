@@ -26,6 +26,7 @@ public class HttpResponseUtils {
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.FOUND)
                 .headerFields(headerFields)
+				.body(new byte[0])
                 .build();
     }
     public static HttpResponse get404HttpResponse(HttpRequest httpRequest, byte[] body) {

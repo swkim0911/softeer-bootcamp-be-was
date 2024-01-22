@@ -26,9 +26,9 @@ public class HttpResponseSender {
     }
 
     private static void responseBody(DataOutputStream dos, HttpResponse httpResponse) throws IOException {
-        Optional<byte[]> body = httpResponse.getBody();
-        if (body.isPresent()) {
-            dos.write(body.get(), 0, body.get().length);
+        byte[] body = httpResponse.getBody();
+        if (body.length > 0) {
+            dos.write(body, 0, body.length);
         }
     }
 }

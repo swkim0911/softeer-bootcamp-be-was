@@ -9,9 +9,9 @@ public class HttpResponse {
     private final String version;
     private final HttpStatusCode statusCode;
     private final Map<String, String> headerFields;
-    private final Optional<byte[]> body;
+    private final byte[] body;
 
-    public HttpResponse(String version, HttpStatusCode statusCode, Map<String, String> headerFields, Optional<byte[]> body) {
+    public HttpResponse(String version, HttpStatusCode statusCode, Map<String, String> headerFields, byte[] body) {
         this.version = version;
         this.statusCode = statusCode;
         this.headerFields = headerFields;
@@ -30,7 +30,7 @@ public class HttpResponse {
         return headerFields;
     }
 
-    public Optional<byte[]> getBody() {
+    public byte[] getBody() {
         return body;
     }
 
