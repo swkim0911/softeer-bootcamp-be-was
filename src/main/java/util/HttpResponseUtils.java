@@ -10,18 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponseUtils {
-    public static HttpResponse get200HttpResponse(HttpRequest httpRequest, byte[] body) {
-        Map<String, String> headerFields = setHeaderFields200And400Code(httpRequest, body);
+    public static HttpResponse getHttpResponse(HttpStatusCode statusCode, String version, String fileType, byte[] body) {
+        Map<String, String> headerFields = setHeaderFields(fileType, body);
         return new HttpResponseBuilder()
-                .version(httpRequest.getVersion())
-                .status(HttpStatusCode.OK)
+                .version(version)
+                .status(statusCode)
                 .headerFields(headerFields)
                 .body(body)
                 .build();
     }
 
     public static HttpResponse get302HttpResponse(HttpRequest httpRequest) {
-        Map<String, String> headerFields = setHeaderFields300Code();
+        Map<String, String> headerFields = setRedirectionHeader();
         return new HttpResponseBuilder()
                 .version(httpRequest.getVersion())
                 .status(HttpStatusCode.FOUND)
@@ -29,26 +29,16 @@ public class HttpResponseUtils {
 				.body(new byte[0])
                 .build();
     }
-    public static HttpResponse get404HttpResponse(HttpRequest httpRequest, byte[] body) {
-        Map<String, String> headerFields = setHeaderFields200And400Code(httpRequest, body);
-        return new HttpResponseBuilder()
-                .version(httpRequest.getVersion())
-                .status(HttpStatusCode.NOT_FOUND)
-                .headerFields(headerFields)
-                .body(body)
-                .build();
-    }
 
-    private static Map<String, String> setHeaderFields200And400Code(HttpRequest httpRequest, byte[] body) {
+    private static Map<String, String> setHeaderFields(String fileType, byte[] body) {
         Map<String, String> headerFields = new HashMap<>();
-        String fileType = UriParser.getFileType(httpRequest.getUri());
 		String contentType = ContentTypeMapper.getContentType(fileType);
         headerFields.put("Content-Type", contentType + ";charset=utf-8");
         headerFields.put("Content-Length", String.valueOf(body.length));
         return headerFields;
     }
 
-    private static Map<String, String> setHeaderFields300Code() {
+    private static Map<String, String> setRedirectionHeader(){
         Map<String, String> headerFields = new HashMap<>();
         headerFields.put("Content-Type", "text/html;charset=utf-8");
         headerFields.put("Location", "/index.html");

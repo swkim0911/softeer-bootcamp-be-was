@@ -34,7 +34,7 @@ public class RequestController implements Runnable {
     public void handleRequest(HttpRequest httpRequest, OutputStream out) throws IOException {
         String uri = httpRequest.getUri();
         RequestHandler requestHandler;
-        if (uri.startsWith("/user")) { //todo get, post메서드로 분기하기
+        if (uri.startsWith("/user")) {
             requestHandler = new UserRequestHandler();
         }else{
             requestHandler = new HomeRequestHandler();
