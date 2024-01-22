@@ -57,6 +57,7 @@ public class HttpRequest {
         for (Map.Entry<String, String> entry : headerFields.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
+		sb.append("Body: ").append(body.orElse(""));
 		logger.debug("{}", sb.toString().trim());
 
 	}

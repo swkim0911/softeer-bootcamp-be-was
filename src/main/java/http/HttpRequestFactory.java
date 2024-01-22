@@ -21,23 +21,29 @@ public class HttpRequestFactory {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		String requestHeader = URLDecoder.decode(getRequestHeader(br), UTF_8);
 		HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestHeader);
-		Map<String, String> map = httpRequestHeaderUtils.getRequestHeaders();
-		String contentLength = map.get("Content-Length");
-		if (contentLength != null) {
-			char[] buf = new char[Integer.parseInt(contentLength)];
-			br.read(buf);
-			System.out.println("buf = " + String.valueOf(buf));
-		}
+		String requestBody = getRequestBody(httpRequestHeaderUtils, br);
 		return new HttpRequestBuilder()
                 .method(httpRequestHeaderUtils.getRequestMethod())
                 .uri(httpRequestHeaderUtils.getRequestUri())
                 .queryString(httpRequestHeaderUtils.getQueryString())
                 .version(httpRequestHeaderUtils.getRequestVersion())
                 .headerFields(httpRequestHeaderUtils.getRequestHeaders())
+				.body(requestBody)
                 .build();
     }
 
-    private static String getRequestHeader(BufferedReader br) throws IOException { //헤더를 읽는 메서드로 변환
+	private static String getRequestBody(HttpRequestHeaderUtils httpRequestHeaderUtils, BufferedReader br) throws IOException {
+		Map<String, String> map = httpRequestHeaderUtils.getRequestHeaders();
+		String contentLength = map.get("Content-Length");
+		if (contentLength != null) {
+			char[] buf = new char[Integer.parseInt(contentLength)];
+			br.read(buf);
+			return URLDecoder.decode(String.valueOf(buf), UTF_8);
+		}
+		return null;
+	}
+
+	private static String getRequestHeader(BufferedReader br) throws IOException { //헤더를 읽는 메서드로 변환
         StringBuilder sb = new StringBuilder();
 		String line = br.readLine();
 		sb.append(line).append("\r\n");
