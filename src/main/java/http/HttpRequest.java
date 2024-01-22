@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
@@ -13,12 +14,15 @@ public class HttpRequest {
     private final String version;
     private final Map<String, String> headerFields;
 
-    public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields) {
+	private final Optional<String> body;
+
+    public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields, Optional<String> body) {
         this.method = method;
         this.uri = uri;
         this.queryString = queryString;
         this.version = version;
         this.headerFields = headerFields;
+        this.body = body;
     }
 
     public String getMethod() {
@@ -41,7 +45,11 @@ public class HttpRequest {
         return headerFields;
     }
 
-    public void logHeaders(){
+	public Optional<String> getBody() {
+		return body;
+	}
+
+	public void logHeaders(){ // 바디도 같이 찍기
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append("Method: ").append(method).append("\n");
         sb.append("Uri: ").append(uri).append("\n");
