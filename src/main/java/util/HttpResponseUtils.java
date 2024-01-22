@@ -41,7 +41,7 @@ public class HttpResponseUtils {
     private static Map<String, String> setHeaderFields200And400Code(HttpRequest httpRequest, byte[] body) {
         Map<String, String> headerFields = new HashMap<>();
         String fileType = UriParser.getFileType(httpRequest.getUri());
-        String contentType = ContentTypeMapper.contentTypeMap.get(fileType);
+		String contentType = ContentTypeMapper.getContentType(fileType);
         headerFields.put("Content-Type", contentType + ";charset=utf-8");
         headerFields.put("Content-Length", String.valueOf(body.length));
         return headerFields;
