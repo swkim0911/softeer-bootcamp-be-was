@@ -17,4 +17,8 @@ public class SessionManager {
 		return sessionId;
 	}
 
+	public static String getUserIdBySessionId(String sessionId) {
+		return sessionIdMap.get(sessionId);
+	}
+
 }
