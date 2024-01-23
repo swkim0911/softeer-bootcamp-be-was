@@ -20,11 +20,11 @@ public class HttpResponseUtils {
                 .build();
     }
 
-    public static HttpResponse get302HttpResponse(HttpStatusCode statusCode, String version) {
-        Map<String, String> headerFields = setRedirectionHeader();
+    public static HttpResponse get302HttpResponse(String uri, String version) {
+        Map<String, String> headerFields = setRedirectionHeader(uri);
         return new HttpResponseBuilder()
                 .version(version)
-                .status(statusCode)
+                .status(HttpStatusCode.FOUND)
                 .headerFields(headerFields)
 				.body(new byte[0])
                 .build();
@@ -38,10 +38,10 @@ public class HttpResponseUtils {
         return headerFields;
     }
 
-    private static Map<String, String> setRedirectionHeader(){
+    private static Map<String, String> setRedirectionHeader(String uri){
         Map<String, String> headerFields = new HashMap<>();
         headerFields.put("Content-Type", "text/html;charset=utf-8");
-        headerFields.put("Location", "/index.html");
+        headerFields.put("Location", uri);
         return headerFields;
     }
 }

@@ -9,14 +9,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 class UserRequestHandlerTest {
 
 	@Test
-	@DisplayName("회원가입 요청시 사용자 정보 db 저장")
-	void 회원가입시_db_저장() {
+	@DisplayName("회원가입 요청시 사용자 정보 db 저장 성공 테스트")
+	void 회원가입시_db_저장_O() {
 		//given
 		RequestHandler requestHandler = new UserRequestHandler();
 		String body = "userId=hello&password=sdd&name=swk&email=test@naver.com";
@@ -29,7 +30,7 @@ class UserRequestHandlerTest {
 
 		//when
 		HttpResponse httpResponse = requestHandler.handle(httpRequest);
-		User user = Database.findUserById("hello");
+		User user = Database.findUserById("hello").orElseThrow(NullPointerException::new);
 
 		//then
 		assertThat(user).isNotNull();
