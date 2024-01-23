@@ -58,6 +58,5 @@ public class HttpRequest {
         }
 		sb.append("Body: ").append(body);
 		logger.debug("{}", sb.toString().trim());
-
 	}
 }

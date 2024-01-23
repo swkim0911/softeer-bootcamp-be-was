@@ -27,19 +27,24 @@ public class UserRequestHandler implements RequestHandler{
 		if (uri.equals("/user/login")) { // 로그인
 			Map<String, String> parameters = QueryStringParser.getParameters(httpRequest.getBody());
 			Optional<User> userOptional = Database.findUserById(parameters.get("userId"));
+
 			if (userOptional.isPresent()) { //아이디가 있는 경우 아이디 비밀번호 일치하는지 확인
 				User findUser = userOptional.get();
 				String findUserId = findUser.getUserId();
 				String findUserPassword = findUser.getPassword();
-				if (findUserId.equals(parameters.get("userId")) && findUserPassword.equals(parameters.get("password"))) {
+
+				if (verifyLoginInfo(findUserId, findUserPassword, parameters.get("userId"), parameters.get("password"))) {
 					String sessionId = SessionManager.generateSessionId(findUserId);
 					return HttpResponseUtils.get302HttpResponse("/index.html", version, sessionId);
 				}
-
 			}
 			// 아이디가 없거나 아이디, 비밀번호가 불일치하는 경우
 			return HttpResponseUtils.get302HttpResponse("/user/login_failed.html", version);
 		}
 		return getHttpResponse(version, uri);
     }
+
+	private static boolean verifyLoginInfo(String findUserId, String findUserPassword, String userId, String password) {
+		return findUserId.equals(userId) && findUserPassword.equals(password);
+	}
 }

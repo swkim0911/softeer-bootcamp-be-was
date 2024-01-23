@@ -20,7 +20,7 @@ public interface RequestHandler {
         }
 		//body가 empty라면 404 페이지 전송
 		body = FileUtils.readFile("/error/404.html");
-		//404 페이지를 찾을 수 없으면 "404 NOT FOUND 문자열 전송"
+		//404 페이지를 찾을 수 없으면 "404 NOT FOUND"ㅌㅈ 문자열 전송
 		return HttpResponseUtils.getHttpResponse(HttpStatusCode.NOT_FOUND, version,
 			UriParser.getFileType(uri), body.orElse("404 NOT FOUND".getBytes()));
     }

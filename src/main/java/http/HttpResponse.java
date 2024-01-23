@@ -9,7 +9,7 @@ public class HttpResponse {
     private final String version;
     private final HttpStatusCode statusCode;
     private final Map<String, String> headerFields;
-    private final byte[] body;
+    private final byte[] body; // 없는 경우 빈 배열 (body = new byte[0])
 
     public HttpResponse(String version, HttpStatusCode statusCode, Map<String, String> headerFields, byte[] body) {
         this.version = version;
