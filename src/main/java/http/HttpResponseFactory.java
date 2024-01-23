@@ -1,6 +1,5 @@
 package http;
 
-import http.HttpResponse;
 import http.builder.HttpResponseBuilder;
 import http.status.HttpStatusCode;
 import util.mapper.ContentTypeMapper;
