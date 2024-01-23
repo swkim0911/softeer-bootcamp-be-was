@@ -8,9 +8,6 @@ import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.*;
 
 class UserRequestHandlerTest {
@@ -24,7 +21,6 @@ class UserRequestHandlerTest {
 		HttpRequest httpRequest = new HttpRequestBuilder()
 			.method("POST")
 			.uri("/user/create")
-			.version("HTTP/1.1")
 			.body(body)
 			.build();
 

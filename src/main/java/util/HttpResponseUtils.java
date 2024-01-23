@@ -1,6 +1,5 @@
 package util;
 
-import http.HttpRequest;
 import http.HttpResponse;
 import http.builder.HttpResponseBuilder;
 import http.status.HttpStatusCode;
@@ -10,30 +9,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponseUtils {
-    public static HttpResponse getHttpResponse(HttpStatusCode statusCode, String version, String fileType, byte[] body) {
+    public static HttpResponse getHttpResponse(HttpStatusCode statusCode, String fileType, byte[] body) {
         Map<String, String> headerFields = setHeaderFields(fileType, body);
         return new HttpResponseBuilder()
-                .version(version)
                 .status(statusCode)
                 .headerFields(headerFields)
                 .body(body)
                 .build();
     }
 
-    public static HttpResponse get302HttpResponse(String uri, String version) {
+    public static HttpResponse get302HttpResponse(String uri) {
         Map<String, String> headerFields = setRedirectionHeader(uri);
         return new HttpResponseBuilder()
-                .version(version)
                 .status(HttpStatusCode.FOUND)
                 .headerFields(headerFields)
 				.body(new byte[0])
                 .build();
     }
 
-	public static HttpResponse get302HttpResponse(String uri, String version, String sessionId) {
+	public static HttpResponse get302HttpResponse(String uri, String sessionId) {
 		Map<String, String> headerFields = setRedirectionHeader(uri, sessionId);
 		return new HttpResponseBuilder()
-			.version(version)
 			.status(HttpStatusCode.FOUND)
 			.headerFields(headerFields)
 			.body(new byte[0])
