@@ -1,4 +1,4 @@
-package util;
+package http;
 
 import http.HttpResponse;
 import http.builder.HttpResponseBuilder;
@@ -8,7 +8,7 @@ import util.mapper.ContentTypeMapper;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpResponseUtils {
+public class HttpResponseFactory {
     public static HttpResponse getHttpResponse(HttpStatusCode statusCode, String fileType, byte[] body) {
         Map<String, String> headerFields = setHeaderFields(fileType, body);
         return new HttpResponseBuilder()

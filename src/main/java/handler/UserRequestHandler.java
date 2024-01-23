@@ -3,10 +3,9 @@ package handler;
 import http.HttpRequest;
 import http.HttpResponse;
 import db.Database;
-import http.status.HttpStatusCode;
 import model.User;
 import session.SessionManager;
-import util.HttpResponseUtils;
+import http.HttpResponseFactory;
 import util.QueryStringParser;
 
 import java.util.Map;
@@ -21,7 +20,7 @@ public class UserRequestHandler implements RequestHandler{
             User user = User.create(queryParameters);
             Database.addUser(user);
 			// index.html 으로 리다이렉트
-			return HttpResponseUtils.get302HttpResponse("/index.html");
+			return HttpResponseFactory.get302HttpResponse("/index.html");
         }
 		if (uri.equals("/user/login")) { // 로그인
 			Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
@@ -34,11 +33,11 @@ public class UserRequestHandler implements RequestHandler{
 
 				if (verifyLoginInfo(findUserId, findUserPassword, queryParameters.get("userId"), queryParameters.get("password"))) {
 					String sessionId = SessionManager.generateSessionId(findUserId);
-					return HttpResponseUtils.get302HttpResponse("/index.html", sessionId);
+					return HttpResponseFactory.get302HttpResponse("/index.html", sessionId);
 				}
 			}
 			// 아이디가 없거나 아이디, 비밀번호가 불일치하는 경우
-			return HttpResponseUtils.get302HttpResponse("/user/login_failed.html");
+			return HttpResponseFactory.get302HttpResponse("/user/login_failed.html");
 		}
 		return getHttpResponse(uri);
     }
