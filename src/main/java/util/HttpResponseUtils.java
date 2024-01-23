@@ -30,6 +30,24 @@ public class HttpResponseUtils {
                 .build();
     }
 
+	public static HttpResponse get302HttpResponse(String uri, String version, String sessionId) {
+		Map<String, String> headerFields = setRedirectionHeader(uri, sessionId);
+		return new HttpResponseBuilder()
+			.version(version)
+			.status(HttpStatusCode.FOUND)
+			.headerFields(headerFields)
+			.body(new byte[0])
+			.build();
+	}
+
+	private static Map<String, String> setRedirectionHeader(String uri, String sessionId){
+		Map<String, String> headerFields = new HashMap<>();
+		headerFields.put("Content-Type", "text/html;charset=utf-8");
+		headerFields.put("Location", uri);
+		headerFields.put("Set-Cookie", "SID=" + sessionId + "; Path=/");
+		return headerFields;
+	}
+
     private static Map<String, String> setHeaderFields(String fileType, byte[] body) {
         Map<String, String> headerFields = new HashMap<>();
 		String contentType = ContentTypeMapper.getContentType(fileType);

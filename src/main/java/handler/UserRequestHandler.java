@@ -20,7 +20,6 @@ public class UserRequestHandler implements RequestHandler{
         if (uri.equals("/user/create")) { // 회원가입
 			Map<String, String> parameters = QueryStringParser.getParameters(httpRequest.getBody());
             User user = User.create(parameters);
-			SessionManager.generateSessionId(user.getUserId());
             Database.addUser(user);
 			// index.html 으로 리다이렉트
 			return HttpResponseUtils.get302HttpResponse("/index.html", version);
@@ -33,8 +32,10 @@ public class UserRequestHandler implements RequestHandler{
 				String findUserId = findUser.getUserId();
 				String findUserPassword = findUser.getPassword();
 				if (findUserId.equals(parameters.get("userId")) && findUserPassword.equals(parameters.get("password"))) {
-					return HttpResponseUtils.get302HttpResponse("/index.html", version);
+					String sessionId = SessionManager.generateSessionId(findUserId);
+					return HttpResponseUtils.get302HttpResponse("/index.html", version, sessionId);
 				}
+
 			}
 			// 아이디가 없거나 아이디, 비밀번호가 불일치하는 경우
 			return HttpResponseUtils.get302HttpResponse("/user/login_failed.html", version);

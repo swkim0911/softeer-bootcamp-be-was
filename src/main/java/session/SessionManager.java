@@ -20,5 +20,4 @@ public class SessionManager {
 	public static String getUserIdBySessionId(String sessionId) {
 		return sessionIdMap.get(sessionId);
 	}
-
 }
