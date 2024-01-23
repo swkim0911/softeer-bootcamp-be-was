@@ -5,6 +5,7 @@ import http.HttpResponse;
 import db.Database;
 import http.status.HttpStatusCode;
 import model.User;
+import session.SessionManager;
 import util.HttpResponseUtils;
 import util.QueryStringParser;
 
@@ -16,14 +17,15 @@ public class UserRequestHandler implements RequestHandler{
     public HttpResponse handle(HttpRequest httpRequest){
         String uri = httpRequest.getUri();
 		String version = httpRequest.getVersion();
-        if (uri.equals("/user/create")) {
+        if (uri.equals("/user/create")) { // 회원가입
 			Map<String, String> parameters = QueryStringParser.getParameters(httpRequest.getBody());
             User user = User.create(parameters);
+			SessionManager.generateSessionId(user.getUserId());
             Database.addUser(user);
 			// index.html 으로 리다이렉트
 			return HttpResponseUtils.get302HttpResponse("/index.html", version);
         }
-		if (uri.equals("/user/login")) {
+		if (uri.equals("/user/login")) { // 로그인
 			Map<String, String> parameters = QueryStringParser.getParameters(httpRequest.getBody());
 			Optional<User> userOptional = Database.findUserById(parameters.get("userId"));
 			if (userOptional.isPresent()) { //아이디가 있는 경우 아이디 비밀번호 일치하는지 확인
