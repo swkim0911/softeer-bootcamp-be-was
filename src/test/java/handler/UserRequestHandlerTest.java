@@ -66,7 +66,7 @@ class UserRequestHandlerTest {
 	}
 
 	@Test
-	@DisplayName("회원가입이 완료된 후 잘못된 로그인 정보 입력으로 로그인 실패 테스트")
+	@DisplayName("회원가입이 완료된 후 잘못된 비밀번호 입력으로 로그인 실패 테스트")
 	void 회원가입_O_로그인_X() {
 		//given
 		initUserDB();
@@ -86,7 +86,18 @@ class UserRequestHandlerTest {
 	@Test
 	@DisplayName("회원가입을 하지 않고 로그인을 시도하여 로그인 실패 테스트")
 	void 회원가입_X_로그인_X() {
+		//given
 
+		//when
+		RequestHandler requestHandler = new UserRequestHandler();
+
+		HttpRequest loginRequest = getLoginRequest("user", "userPW");
+		HttpResponse httpResponse = requestHandler.handle(loginRequest);
+		Map<String, String> headerFields = httpResponse.getHeaderFields();
+		String uri = headerFields.get("Location");
+
+		//then
+		assertThat(uri).isEqualTo("/user/login_failed.html");
 	}
 
 
