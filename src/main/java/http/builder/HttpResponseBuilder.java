@@ -10,7 +10,7 @@ public class HttpResponseBuilder {
     private String version;
     private HttpStatusCode statusCode;
     private Map<String, String> headerFields;
-    private Optional<byte[]> body;
+    private byte[] body;
 
     public HttpResponseBuilder version(String version) {
         this.version = version;
@@ -26,7 +26,7 @@ public class HttpResponseBuilder {
     }
 
     public HttpResponseBuilder body(byte[] body) {
-        this.body = Optional.of(body);
+		this.body = body;
         return this;
     }
 

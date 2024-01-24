@@ -1,11 +1,10 @@
 package util.mapper;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ContentTypeMapper {
-    static public Map<String, String> contentTypeMap = new ConcurrentHashMap<>();
+    private static Map<String, String> contentTypeMap = new ConcurrentHashMap<>();
 
 	static {
         contentTypeMap.put("html", "text/html");
@@ -15,4 +14,8 @@ public class ContentTypeMapper {
         contentTypeMap.put("ttf", "font/ttf");
         contentTypeMap.put("ico", "image/x-icon");
     }
+
+	public static String getContentType(String fileType) {
+		return contentTypeMap.get(fileType);
+	}
 }

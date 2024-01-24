@@ -3,6 +3,7 @@ package http.builder;
 import http.HttpRequest;
 
 import java.util.Map;
+
 public class HttpRequestBuilder {
 
     private String method;
@@ -10,6 +11,7 @@ public class HttpRequestBuilder {
     private String queryString;
     private String version;
     private Map<String, String> headerFields;
+	private String body;
 
     public HttpRequestBuilder method(String method) {
         this.method = method;
@@ -35,7 +37,12 @@ public class HttpRequestBuilder {
         this.headerFields = headerFields;
         return this;
     }
+
+	public HttpRequestBuilder body(String body) {
+		this.body = body;
+		return this;
+	}
     public HttpRequest build() {
-        return new HttpRequest(method, uri, queryString, version, headerFields);
+        return new HttpRequest(method, uri, queryString, version, headerFields, body);
     }
 }

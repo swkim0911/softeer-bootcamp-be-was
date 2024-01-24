@@ -8,7 +8,7 @@ Java Web Application Server 2023
 를 참고하여 작성되었습니다.
 
 
-# 학습 내용
+# 학습 내용 step 1
 
 ## 자바 스레드 생명주기
 
@@ -72,6 +72,22 @@ Virtual Thread는 기존 Java의 스레드 모델과 달리, 플랫폼 스레드
 ### Java Thread 기반 코드에서 Concurrent 패키지를 사용한 이유
 
 jdk 17 기준으로 Java에서는 사용자 수준 스레드와 커널 수준 스레드가 각각 존재하며, 사용자 수준 스레드를  커널 수준 스레드에 매핑하는 방식으로 동작한다. 커널 수준 스레드는 OS의 지원을 받아야 하므로 스레드를 매번 요청마다 생성하고 종료하는 것은 시스템의 자원이 많이 소모되고, 성능이 저하된다. 그래서 미리 일정 개수의 스레드를 생성하고 관리하는 스레드 풀을 사용하는게 효과적인데 Concurrent 패키지의 ExecutorService 인터페이스와 Executors 유틸리티 클래스가 스레드 풀을 사용할 수 있는 api를 제공한다.
+
+# 학습 내용 step 4
+
+## HTTP request body를 읽어들일 때 br.readLine() 함수가 아닌 br.read() 함수를 사용한 이유
+
+br.readLine() 함수의 Api 문서를 보면 이렇게 쓰여있다.
+
+> Reads a line of text.  A line is considered to be terminated by any one of a line feed ('\n'), a carriage return ('\r'), a carriage return followed immediately by a line feed, or by reaching the end-of-file (EOF).
+
+br.readLine() 함수는 텍스트의 한 line을 읽는데 이 line은 ‘\n’, ‘\r’, ‘\r\n’, 이나 EOF에 도달하여 끝나는 것을 line으로 한다.
+
+하지만 HTTP 프로토콜에서는 일반적으로 EOF를 명시적으로 표시하지 않는다.  HTTP 메시지의 끝은 Content-Length 헤더를 통해 명시된 길이에 따라 결정되거나, Transfer-Encoding 헤더가 chunked로 설정되어 있다면 각 청크의 끝에 해당하는 CRLF가 사용된다. 따라서 EOF는 명시적으로 표시되는 것이 아니라, 프로토콜 및 헤더에 따라 메시지의 끝을 결정된다.
+
+따라서 body를 읽기 위해 br.readLine() 함수를 쓴다면 EOF를 만나지 못해 계속 무한루프를 돈다. 
+
+body를 읽어오기 위해서 Content-Length를 사용해야 한다. br.read(char[] buf) 함수는 buf의 크기 만큼 스트림에서 읽어오는데 buf 배열의 크기를 Content-Length 크기만큼 할당하고 읽어오면 body를 읽어올 수 있다.
 
 ## Reference
 - [Java의 미래, Virtual Thread - 김태헌](https://techblog.woowahan.com/15398/)

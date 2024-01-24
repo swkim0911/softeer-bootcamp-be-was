@@ -12,13 +12,15 @@ public class HttpRequest {
     private final String queryString; // 없는 경우 None
     private final String version;
     private final Map<String, String> headerFields;
+	private final String body; // 없는 경우 "" (empty)
 
-    public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields) {
+    public HttpRequest(String method, String uri, String queryString, String version, Map<String, String> headerFields, String body) {
         this.method = method;
         this.uri = uri;
         this.queryString = queryString;
         this.version = version;
         this.headerFields = headerFields;
+        this.body = body;
     }
 
     public String getMethod() {
@@ -41,7 +43,11 @@ public class HttpRequest {
         return headerFields;
     }
 
-    public void logHeaders(){
+	public String getBody() {
+		return body;
+	}
+
+	public void logHeaders(){ // 바디도 같이 찍기
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append("Method: ").append(method).append("\n");
         sb.append("Uri: ").append(uri).append("\n");
@@ -50,6 +56,8 @@ public class HttpRequest {
         for (Map.Entry<String, String> entry : headerFields.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
-        logger.debug("{}", sb);
-    }
+		sb.append("Body: ").append(body);
+		logger.debug("{}", sb.toString().trim());
+
+	}
 }
