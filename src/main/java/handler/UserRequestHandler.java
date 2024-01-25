@@ -51,7 +51,7 @@ public class UserRequestHandler implements RequestHandler{
 					if (findUser != null) {
 						//todo 로그인 한 사람이면 사용라 리스트를 포함한 동적 html 생성하기
 						byte[] userListHTML = HTMLGenerator.getUserListHTML();
-//						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
+						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
 					}
 				}
 			}
