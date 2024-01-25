@@ -35,6 +35,10 @@ public class HttpRequest {
         return queryString;
     }
 
+	public String[] getCookies() {
+		String cookieValues = headerFields.getOrDefault("Cookie", ""); //쿠키 필드가 없으면 빈문자 반환
+		return cookieValues.split(";");
+	}
     public Map<String, String> getHeaderFields() {
         return headerFields;
     }

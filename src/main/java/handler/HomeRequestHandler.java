@@ -21,16 +21,12 @@ public class HomeRequestHandler implements RequestHandler{
         if (uri.equals("/")) {
             uri = "/index.html";
         }
+
 		if (uri.equals("/index.html")) {
-			//todo 쿠키가 있는지 확인하기 -> index.html 파일에 동적 html
-			Map<String, String> headerFields = httpRequest.getHeaderFields();
-			String cookieValues = headerFields.getOrDefault("Cookie", ""); // 쿠키 필드가 없는 경우 빈 문자열
-			String targetKey = "SID";
-			String[] cookies = cookieValues.split(";");
+			String[] cookies = httpRequest.getCookies();
 			for (String cookie : cookies) {
-				String[] keyValue = cookie.trim().split("=");
-				String sessionId = keyValue[1];
-				if (keyValue[0].equals(targetKey) && SessionManager.containsSession(sessionId)) { // 쿠키가 있는 경우 동적 html
+				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html
+					String sessionId = getSessionId(cookie);
 					String userId = SessionManager.getUserIdBySessionId(sessionId);
 					Optional<User> optionalUser = Database.findUserById(userId);
 					if (optionalUser.isPresent()) {
@@ -43,4 +39,16 @@ public class HomeRequestHandler implements RequestHandler{
 		}
 		return getHttpResponse(uri);
     }
+	private boolean isCookieValid(String cookie) {
+		String targetKey = "SID";
+		String[] keyValue = cookie.trim().split("=");
+		String key = keyValue[0];
+		String value = keyValue[1];
+		return key.equals(targetKey) && SessionManager.containsSession(value);
+	}
+
+	private String getSessionId(String cookie) {
+		String[] keyValue = cookie.trim().split("=");
+		return keyValue[1];
+	}
 }

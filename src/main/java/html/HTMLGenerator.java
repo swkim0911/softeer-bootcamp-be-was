@@ -24,8 +24,8 @@ public class HTMLGenerator {
 					String tmp = line.trim();
 					int indent = line.length() - tmp.length() + INDENTATION_LENGTH;
                     sb.append(" ".repeat(Math.max(0, indent))); // 윗 줄과 3칸 indentation
-					sb.append("<li><span class=\"navbar-text\" style=\"font-weight: 550;\">");
-					sb.append(userName).append("</span></li>").append("\n");
+					sb.append("<li><span class=\"navbar-text\" style=\"font-weight: 600;\">");
+					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
 				}
 			}
 		} catch (IOException e) {
