@@ -13,8 +13,11 @@ public class SessionManager {
 		// UUID 난수를 통해 sessionId 생성
 		String sessionId = UUID.randomUUID().toString();
 		sessionIdMap.put(sessionId, userId);
-
 		return sessionId;
+	}
+
+	public static boolean containsSession(String sessionId) {
+		return sessionIdMap.containsKey(sessionId);
 	}
 
 	public static String getUserIdBySessionId(String sessionId) {
