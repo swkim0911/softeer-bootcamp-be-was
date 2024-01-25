@@ -35,8 +35,12 @@ public class HttpRequest {
         return queryString;
     }
 
+	//쿠키 필드가 없으면 빈 문자열 배열 반환
 	public String[] getCookies() {
-		String cookieValues = headerFields.getOrDefault("Cookie", ""); //쿠키 필드가 없으면 빈문자 반환
+		String cookieValues = headerFields.get("Cookie");
+		if (cookieValues == null) {
+			return new String[0];
+		}
 		return cookieValues.split(";");
 	}
     public Map<String, String> getHeaderFields() {

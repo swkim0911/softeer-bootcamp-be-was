@@ -27,6 +27,7 @@ public interface RequestHandler {
 
 	default boolean isCookieValid(String cookie) {
 		String targetKey = "SID";
+		System.out.println("cookie = " + cookie);
 		String[] keyValue = cookie.trim().split("=");
 		String key = keyValue[0];
 		String value = keyValue[1];

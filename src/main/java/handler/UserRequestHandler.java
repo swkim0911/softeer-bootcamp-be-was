@@ -49,14 +49,15 @@ public class UserRequestHandler implements RequestHandler{
 					String userId = SessionManager.getUserIdBySessionId(sessionId);
 					User findUser= Database.findUserById(userId);
 					if (findUser != null) {
-						//todo 로그인 한 사람이면 사용라 리스트를 포함한 동적 html 생성하기
 						byte[] userListHTML = HTMLGenerator.getUserListHTML();
+						System.out.println("!!");
 						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
 					}
 				}
 			}
 			//todo 로그인 하지 않은 경우 /user/login.html 리다이렉트
-//			HttpResponseFactory.get302HttpResponse("/user/login.html");
+			System.out.println("!!!");
+			HttpResponseFactory.get302HttpResponse("/user/login.html");
 		}
 		return getHttpResponse(uri);
     }
