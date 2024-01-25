@@ -27,10 +27,9 @@ public class UserRequestHandler implements RequestHandler{
         }
 		if (uri.equals("/user/login")) { // 로그인
 			Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
-			Optional<User> userOptional = Database.findUserById(queryParameters.get("userId"));
+			User findUser = Database.findUserById(queryParameters.get("userId"));
 
-			if (userOptional.isPresent()) { //아이디가 있는 경우 비밀번호 일치하는지 확인
-				User findUser = userOptional.get();
+			if (findUser != null) { //아이디가 있는 경우 비밀번호 일치하는지 확인
 				String findUserId = findUser.getUserId();
 				String findUserPassword = findUser.getPassword();
 
@@ -48,8 +47,8 @@ public class UserRequestHandler implements RequestHandler{
 				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html
 					String sessionId = getSessionId(cookie);
 					String userId = SessionManager.getUserIdBySessionId(sessionId);
-					Optional<User> optionalUser = Database.findUserById(userId);
-					if (optionalUser.isPresent()) {
+					User findUser= Database.findUserById(userId);
+					if (findUser != null) {
 						//todo 로그인 한 사람이면 사용라 리스트를 포함한 동적 html 생성하기
 //						byte[] userListHTML = HTMLGenerator.getUserListHTML();
 //						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);

@@ -27,9 +27,8 @@ public class HomeRequestHandler implements RequestHandler{
 				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html 전송
 					String sessionId = getSessionId(cookie);
 					String userId = SessionManager.getUserIdBySessionId(sessionId);
-					Optional<User> optionalUser = Database.findUserById(userId);
-					if (optionalUser.isPresent()) {
-						User findUser = optionalUser.get();
+					User findUser = Database.findUserById(userId);
+					if (findUser != null) {
 						byte[] homeHTML = HTMLGenerator.getHomeHTML(uri, findUser.getName());
 						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), homeHTML);
 					}

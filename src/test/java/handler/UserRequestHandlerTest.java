@@ -36,7 +36,7 @@ class UserRequestHandlerTest {
 
 		//when
 		HttpResponse httpResponse = requestHandler.handle(httpRequest);
-		User user = Database.findUserById("hello").orElseThrow(NullPointerException::new);
+		User user = Database.findUserById("hello");
 
 		//then
 		assertThat(user).isNotNull();
