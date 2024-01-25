@@ -56,8 +56,7 @@ public class UserRequestHandler implements RequestHandler{
 				}
 			}
 			//todo 로그인 하지 않은 경우 /user/login.html 리다이렉트
-			System.out.println("!!!");
-			HttpResponseFactory.get302HttpResponse("/user/login.html");
+			return HttpResponseFactory.get302HttpResponse("/user/login.html");
 		}
 		return getHttpResponse(uri);
     }
