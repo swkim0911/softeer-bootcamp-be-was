@@ -10,10 +10,6 @@ import model.User;
 import session.SessionManager;
 import util.UriParser;
 
-import java.util.Map;
-import java.util.Optional;
-
-
 public class HomeRequestHandler implements RequestHandler{
     @Override
     public HttpResponse handle(HttpRequest httpRequest){

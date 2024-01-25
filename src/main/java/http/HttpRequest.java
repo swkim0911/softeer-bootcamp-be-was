@@ -5,13 +5,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-import static http.HttpVersionConst.*;
-
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private final String method;
     private final String uri;
     private final String queryString; // 없는 경우 None
+	private final String version;
     private final Map<String, String> headerFields;
 	private final String body; // 없는 경우 "" (empty)
 
@@ -19,6 +18,7 @@ public class HttpRequest {
         this.method = method;
         this.uri = uri;
         this.queryString = queryString;
+		this.version = "HTTP/1.1";
         this.headerFields = headerFields;
         this.body = body;
     }
@@ -56,7 +56,7 @@ public class HttpRequest {
         sb.append("\n").append("Method: ").append(method).append("\n");
         sb.append("Uri: ").append(uri).append("\n");
         sb.append("Query-String: ").append(queryString).append("\n");
-        sb.append("Version: ").append(VERSION).append("\n");
+        sb.append("Version: ").append(version).append("\n");
         for (Map.Entry<String, String> entry : headerFields.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }

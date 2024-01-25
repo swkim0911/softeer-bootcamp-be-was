@@ -12,7 +12,6 @@ import util.QueryStringParser;
 import util.UriParser;
 
 import java.util.Map;
-import java.util.Optional;
 
 public class UserRequestHandler implements RequestHandler{
     @Override
@@ -55,7 +54,6 @@ public class UserRequestHandler implements RequestHandler{
 					}
 				}
 			}
-			//todo 로그인 하지 않은 경우 /user/login.html 리다이렉트
 			return HttpResponseFactory.get302HttpResponse("/user/login.html");
 		}
 		return getHttpResponse(uri);
