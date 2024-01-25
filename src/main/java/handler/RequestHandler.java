@@ -1,8 +1,10 @@
 package handler;
 
+import db.Database;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.status.HttpStatusCode;
+import model.User;
 import session.SessionManager;
 import util.FileUtils;
 import http.HttpResponseFactory;
@@ -32,7 +34,6 @@ public interface RequestHandler {
 
 	default boolean isCookieValid(String cookie) {
 		String targetKey = "SID";
-		System.out.println("cookie = " + cookie);
 		String[] keyValue = cookie.trim().split("=");
 		String key = keyValue[0];
 		String value = keyValue[1];
@@ -42,5 +43,10 @@ public interface RequestHandler {
 	default String getSessionId(String cookie) {
 		String[] keyValue = cookie.trim().split("=");
 		return keyValue[1];
+	}
+
+	default User getUserBySession(String sessionId) {
+		String userId = SessionManager.getUserIdBySessionId(sessionId);
+		return Database.findUserById(userId);
 	}
 }

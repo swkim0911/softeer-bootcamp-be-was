@@ -1,13 +1,11 @@
 package handler;
 
-import db.Database;
 import html.HTMLGenerator;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.HttpResponseFactory;
 import http.status.HttpStatusCode;
 import model.User;
-import session.SessionManager;
 import util.UriParser;
 
 public class HomeRequestHandler implements RequestHandler{
@@ -32,9 +30,4 @@ public class HomeRequestHandler implements RequestHandler{
         }
 		return getHttpResponse(uri);
     }
-
-	private static User getUserBySession(String sessionId) {
-		String userId = SessionManager.getUserIdBySessionId(sessionId);
-        return Database.findUserById(userId);
-	}
 }

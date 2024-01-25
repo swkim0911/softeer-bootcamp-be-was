@@ -45,11 +45,9 @@ public class UserRequestHandler implements RequestHandler{
 			for (String cookie : cookies) {
 				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html
 					String sessionId = getSessionId(cookie);
-					String userId = SessionManager.getUserIdBySessionId(sessionId);
-					User findUser= Database.findUserById(userId);
+					User findUser = getUserBySession(sessionId);
 					if (findUser != null) {
 						byte[] userListHTML = HTMLGenerator.getUserListHTML();
-						System.out.println("!!");
 						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
 					}
 				}

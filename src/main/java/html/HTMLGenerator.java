@@ -53,12 +53,12 @@ public class HTMLGenerator {
 			while ((line = br.readLine()) != null) {
 				sb.append(line).append("\n");
 				if (line.contains("user-table")) {
-					sb.append("              <thead>").append("\n");
-					sb.append("                <tr>").append("\n");
-					sb.append("                    <th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th><th></th>").append("\n");
-					sb.append("                </tr>").append("\n");
-					sb.append("              </thead>").append("\n");
-					sb.append("              <tbody>").append("\n");
+					sb.append("<thead>").append("\n");
+					sb.append("<tr>").append("\n");
+					sb.append("<th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th><th></th>").append("\n");
+					sb.append("</tr>").append("\n");
+					sb.append("</thead>").append("\n");
+					sb.append("<tbody>").append("\n");
 					// 디비에서 읽으면서 사용자 리스트 뿌리기
 					int count = 0;
 					Collection<User> users = Database.findAll();
