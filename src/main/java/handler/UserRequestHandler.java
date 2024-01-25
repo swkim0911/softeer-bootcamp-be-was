@@ -24,10 +24,9 @@ public class UserRequestHandler implements RequestHandler{
         }
 		if (uri.equals("/user/login")) { // 로그인
 			Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
-			Optional<User> userOptional = Database.findUserById(queryParameters.get("userId"));
+			User findUser = Database.findUserById(queryParameters.get("userId"));
 
-			if (userOptional.isPresent()) { //아이디가 있는 경우 비밀번호 일치하는지 확인
-				User findUser = userOptional.get();
+			if (findUser != null) { //아이디가 있는 경우 비밀번호 일치하는지 확인
 				String findUserId = findUser.getUserId();
 				String findUserPassword = findUser.getPassword();
 
