@@ -66,8 +66,10 @@ public class HTMLGenerator {
 					Collection<User> users = Database.findAll();
 					for (User user : users) {
 						sb.append("<tr>").append("\n");
-						sb.append("<th scope=\"row\">").append(++count).append("</th");
-						sb.append(" <td>").append(user.getUserId()).append("</td> <td>").append(user.getName()).append("</td> <td>").append(user.getEmail()).append("</td>");
+						sb.append("<th scope=\"row\">").append(++count).append("</th>");
+						sb.append(" <td>").append(user.getUserId()).append("</td>");
+						sb.append(" <td>").append(user.getName()).append("</td>");
+						sb.append(" <td>").append(user.getEmail()).append("</td>");
 						sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>").append("\n");
 						sb.append("</tr>").append("\n");
 					}
