@@ -25,6 +25,11 @@ public interface RequestHandler {
 		return HttpResponseFactory.getHttpResponse(HttpStatusCode.NOT_FOUND, UriParser.getFileType(uri), body.orElse("404 NOT FOUND".getBytes()));
     }
 
+	default boolean isHTML(String uri) {
+		String fileType = UriParser.getFileType(uri);
+		return fileType.equals("html");
+	}
+
 	default boolean isCookieValid(String cookie) {
 		String targetKey = "SID";
 		System.out.println("cookie = " + cookie);
