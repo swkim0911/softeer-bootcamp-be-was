@@ -29,7 +29,7 @@ public class HomeRequestHandler implements RequestHandler{
 					String userId = SessionManager.getUserIdBySessionId(sessionId);
 					User findUser = Database.findUserById(userId);
 					if (findUser != null) {
-						byte[] homeHTML = HTMLGenerator.getHomeHTML(uri, findUser.getName());
+						byte[] homeHTML = HTMLGenerator.getHomeHTML(findUser.getName());
 						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), homeHTML);
 					}
 				}
