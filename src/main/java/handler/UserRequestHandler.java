@@ -1,12 +1,15 @@
 package handler;
 
+import html.HTMLGenerator;
 import http.HttpRequest;
 import http.HttpResponse;
 import db.Database;
+import http.status.HttpStatusCode;
 import model.User;
 import session.SessionManager;
 import http.HttpResponseFactory;
 import util.QueryStringParser;
+import util.UriParser;
 
 import java.util.Map;
 import java.util.Optional;
@@ -38,6 +41,23 @@ public class UserRequestHandler implements RequestHandler{
 			}
 			// 아이디가 없는 경우
 			return HttpResponseFactory.get302HttpResponse("/user/login_failed.html");
+		}
+		if (uri.equals("/user/list.html")) {
+			String[] cookies = httpRequest.getCookies();
+			for (String cookie : cookies) {
+				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html
+					String sessionId = getSessionId(cookie);
+					String userId = SessionManager.getUserIdBySessionId(sessionId);
+					Optional<User> optionalUser = Database.findUserById(userId);
+					if (optionalUser.isPresent()) {
+						//todo 로그인 한 사람이면 사용라 리스트를 포함한 동적 html 생성하기
+//						byte[] userListHTML = HTMLGenerator.getUserListHTML();
+//						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
+					}
+				}
+			}
+			//todo 로그인 하지 않은 경우 /user/login.html 리다이렉트
+			HttpResponseFactory.get302HttpResponse("/user/login.html");
 		}
 		return getHttpResponse(uri);
     }

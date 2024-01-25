@@ -3,6 +3,7 @@ package handler;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.status.HttpStatusCode;
+import session.SessionManager;
 import util.FileUtils;
 import http.HttpResponseFactory;
 import util.UriParser;
@@ -23,4 +24,17 @@ public interface RequestHandler {
 		//404 페이지를 찾을 수 없으면 "404 NOT FOUND" 문자열 전송
 		return HttpResponseFactory.getHttpResponse(HttpStatusCode.NOT_FOUND, UriParser.getFileType(uri), body.orElse("404 NOT FOUND".getBytes()));
     }
+
+	default boolean isCookieValid(String cookie) {
+		String targetKey = "SID";
+		String[] keyValue = cookie.trim().split("=");
+		String key = keyValue[0];
+		String value = keyValue[1];
+		return key.equals(targetKey) && SessionManager.containsSession(value);
+	}
+
+	default String getSessionId(String cookie) {
+		String[] keyValue = cookie.trim().split("=");
+		return keyValue[1];
+	}
 }

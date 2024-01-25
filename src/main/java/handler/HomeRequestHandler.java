@@ -24,13 +24,13 @@ public class HomeRequestHandler implements RequestHandler{
 		if (uri.equals("/index.html")) {
 			String[] cookies = httpRequest.getCookies();
 			for (String cookie : cookies) {
-				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html
+				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html 전송
 					String sessionId = getSessionId(cookie);
 					String userId = SessionManager.getUserIdBySessionId(sessionId);
 					Optional<User> optionalUser = Database.findUserById(userId);
 					if (optionalUser.isPresent()) {
 						User findUser = optionalUser.get();
-						byte[] homeHTML = HTMLGenerator.getHomeHTML(findUser.getName());
+						byte[] homeHTML = HTMLGenerator.getHomeHTML(uri, findUser.getName());
 						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), homeHTML);
 					}
 				}
@@ -38,16 +38,4 @@ public class HomeRequestHandler implements RequestHandler{
 		}
 		return getHttpResponse(uri);
     }
-	private boolean isCookieValid(String cookie) {
-		String targetKey = "SID";
-		String[] keyValue = cookie.trim().split("=");
-		String key = keyValue[0];
-		String value = keyValue[1];
-		return key.equals(targetKey) && SessionManager.containsSession(value);
-	}
-
-	private String getSessionId(String cookie) {
-		String[] keyValue = cookie.trim().split("=");
-		return keyValue[1];
-	}
 }
