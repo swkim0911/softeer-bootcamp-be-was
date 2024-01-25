@@ -21,7 +21,6 @@ public class HomeRequestHandler implements RequestHandler{
         if (uri.equals("/")) {
             uri = "/index.html";
         }
-
 		if (uri.equals("/index.html")) {
 			String[] cookies = httpRequest.getCookies();
 			for (String cookie : cookies) {

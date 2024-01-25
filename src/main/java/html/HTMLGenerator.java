@@ -19,14 +19,19 @@ public class HTMLGenerator {
 		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				sb.append(line).append("\n");
-				if (line.contains("name-space")) {
-					String tmp = line.trim();
-					int indent = line.length() - tmp.length() + INDENTATION_LENGTH;
+				if (line.contains("login-button")) {
+					line = line.replace("로그인", "로그아웃");
+					line = line.replace("user/login.html", "#");
+
+				}
+				if (line.contains("navbar-name-space")) {
+					String trimLine = line.trim();
+					int indent = line.length() - trimLine.length() + INDENTATION_LENGTH;
                     sb.append(" ".repeat(Math.max(0, indent))); // 윗 줄과 3칸 indentation
 					sb.append("<li><span class=\"navbar-text\" style=\"font-weight: 600;\">");
 					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
 				}
+				sb.append(line).append("\n");
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage());
