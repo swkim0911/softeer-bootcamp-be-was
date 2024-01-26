@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class HttpResponseFactory {
     public static HttpResponse getHttpResponse(HttpStatusCode statusCode, String fileType, byte[] body) {
-        Map<String, String> headerFields = setHeaderFields(fileType, body);
+        Map<String, String> headerFields = setHeader(fileType, body);
         return new HttpResponseBuilder()
                 .status(statusCode)
                 .headerFields(headerFields)
@@ -34,27 +34,27 @@ public class HttpResponseFactory {
 			.body(new byte[0])
 			.build();
 	}
-
-	private static Map<String, String> setRedirectionHeader(String uri, String sessionId){
-		Map<String, String> headerFields = new HashMap<>();
-		headerFields.put("Content-Type", "text/html;charset=utf-8");
-		headerFields.put("Location", uri);
-		headerFields.put("Set-Cookie", "SID=" + sessionId + "; Path=/");
-		return headerFields;
-	}
-
-    private static Map<String, String> setHeaderFields(String fileType, byte[] body) {
+    private static Map<String, String> setHeader(String fileType, byte[] body) {
         Map<String, String> headerFields = new HashMap<>();
 		String contentType = ContentTypeMapper.getContentType(fileType);
         headerFields.put("Content-Type", contentType + ";charset=utf-8");
         headerFields.put("Content-Length", String.valueOf(body.length));
         return headerFields;
     }
-
     private static Map<String, String> setRedirectionHeader(String uri){
         Map<String, String> headerFields = new HashMap<>();
-        headerFields.put("Content-Type", "text/html;charset=utf-8");
         headerFields.put("Location", uri);
         return headerFields;
     }
+	private static Map<String, String> setRedirectionHeader(String uri, String sessionId){
+		Map<String, String> headerFields = new HashMap<>();
+		headerFields.put("Location", uri);
+		setCookie(sessionId, headerFields);
+		return headerFields;
+	}
+
+	private static void setCookie(String sessionId, Map<String, String> headerFields) {
+		String cookie = "SID=" + sessionId + "; Path=/";
+		headerFields.put("Set-Cookie", cookie);
+	}
 }
