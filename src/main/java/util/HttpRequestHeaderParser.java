@@ -21,7 +21,7 @@ public class HttpRequestHeaderParser {
             String[] header = headerLine.split(":", 2);
             if (header.length > 1) {
                 String field = header[0];
-                String value = header[1].stripLeading();
+				String value = header[1].strip(); // trailing whitespace 제거
                 requestHeaderMap.put(field, value);
             }
         }

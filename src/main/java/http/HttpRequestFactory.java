@@ -16,8 +16,7 @@ public class HttpRequestFactory {
 
     public static HttpRequest getRequest(InputStream in) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		String requestHeader = getRequestHeader(br);
-		HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(requestHeader);
+		HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(getRequestHeader(br));
 		String requestBody = getRequestBody(br, httpRequestHeaderUtils);
 
 		return new HttpRequestBuilder()
@@ -29,7 +28,7 @@ public class HttpRequestFactory {
                 .build();
     }
 
-	private static String getRequestHeader(BufferedReader br) throws IOException { //헤더를 읽는 메서드로 변환
+	private static String getRequestHeader(BufferedReader br) throws IOException {
         StringBuilder sb = new StringBuilder();
 		String line = br.readLine();
 		sb.append(line).append("\r\n");
@@ -46,7 +45,7 @@ public class HttpRequestFactory {
 		if (contentLength != null) {
 			char[] buf = new char[Integer.parseInt(contentLength)];
 			br.read(buf);
-			return URLDecoder.decode(String.valueOf(buf), UTF_8);
+			return URLDecoder.decode(String.valueOf(buf), UTF_8); // url 인코딩 문자 디코딩
 		}
 		return ""; // body 없는 경우
 	}
