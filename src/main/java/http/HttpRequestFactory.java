@@ -41,7 +41,7 @@ public class HttpRequestFactory {
 
 	private static String getRequestBody(BufferedReader br, HttpRequestHeaderUtils httpRequestHeaderUtils) throws IOException {
 		Map<String, String> fieldMap = httpRequestHeaderUtils.getRequestHeaders();
-		String contentLength = fieldMap.get("Content-Length");
+		String contentLength = fieldMap.get("content-length");
 		if (contentLength != null) {
 			char[] buf = new char[Integer.parseInt(contentLength)];
 			br.read(buf);

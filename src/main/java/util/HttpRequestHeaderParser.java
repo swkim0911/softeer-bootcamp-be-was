@@ -20,7 +20,7 @@ public class HttpRequestHeaderParser {
             String headerLine = lines[i];
             String[] header = headerLine.split(":", 2);
             if (header.length > 1) {
-                String field = header[0];
+				String field = header[0].toLowerCase(); // 필드 이름은 case-insensitive 때문에 모두 소문자로 변경
 				String value = header[1].strip(); // trailing whitespace 제거
                 requestHeaderMap.put(field, value);
             }
