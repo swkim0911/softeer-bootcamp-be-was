@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 public interface RequestHandler {
-    HttpResponse handle(HttpRequest httpRequest);
+    HttpResponse handle(HttpRequest httpRequest, String findSessionId);
 
     default HttpResponse getHttpResponse(String uri){
         Optional<byte[]> body = FileUtils.readFile(uri);
@@ -30,19 +30,6 @@ public interface RequestHandler {
 	default boolean isHTML(String uri) {
 		String fileType = UriParser.getFileType(uri);
 		return fileType.equals("html");
-	}
-
-	default boolean isCookieValid(String cookie) {
-		String targetKey = "SID";
-		String[] keyValue = cookie.trim().split("=");
-		String key = keyValue[0];
-		String value = keyValue[1];
-		return key.equals(targetKey) && SessionManager.containsSession(value);
-	}
-
-	default String getSessionId(String cookie) {
-		String[] keyValue = cookie.trim().split("=");
-		return keyValue[1];
 	}
 
 	default User getUserBySession(String sessionId) {

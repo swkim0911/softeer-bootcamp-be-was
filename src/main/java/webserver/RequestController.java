@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import handler.RequestHandler;
 import handler.HomeRequestHandler;
 import handler.UserRequestHandler;
+import util.SessionCookieUtils;
 
 public class RequestController implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
@@ -26,14 +27,14 @@ public class RequestController implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			HttpRequest httpRequest = HttpRequestFactory.getRequest(in);
 			logger.debug("{}", httpRequest);
-			//todo 세션있는지 확인 로직 추가
-			HttpResponse httpResponse = handleRequest(httpRequest);
+			String findSessionId = SessionCookieUtils.getSessionId(httpRequest.getCookies());
+			HttpResponse httpResponse = handleRequest(httpRequest, findSessionId);
 			HttpResponseSender.send(httpResponse, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
-    public HttpResponse handleRequest(HttpRequest httpRequest) throws IOException {
+    public HttpResponse handleRequest(HttpRequest httpRequest, String findSessionId) throws IOException {
         String uri = httpRequest.getUri();
         RequestHandler requestHandler;
         if (uri.startsWith("/user")) {
@@ -41,6 +42,6 @@ public class RequestController implements Runnable {
         }else{
             requestHandler = new HomeRequestHandler();
         }
-        return requestHandler.handle(httpRequest);
+        return requestHandler.handle(httpRequest, findSessionId);
     }
 }

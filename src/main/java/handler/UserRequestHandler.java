@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class UserRequestHandler implements RequestHandler{
     @Override
-    public HttpResponse handle(HttpRequest httpRequest){
+    public HttpResponse handle(HttpRequest httpRequest, String findSessionId){
         String uri = httpRequest.getUri();
         if (uri.equals("/user/create")) { // 회원가입
 			Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
@@ -43,16 +43,10 @@ public class UserRequestHandler implements RequestHandler{
 		}
 
 		if (uri.equals("/user/list.html")) { // 사용자 목록
-			String[] cookies = httpRequest.getCookies();
-			for (String cookie : cookies) {
-				if (isCookieValid(cookie)) { // SID 쿠키가 있는 경우 동적 html
-					String sessionId = getSessionId(cookie);
-					User findUser = getUserBySession(sessionId);
-					if (findUser != null) {
-						byte[] userListHTML = HTMLGenerator.getUserListHTML();
-						return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
-					}
-				}
+			User findUser = getUserBySession(findSessionId);
+			if (findUser != null) {
+				byte[] userListHTML = HTMLGenerator.getUserListHTML();
+				return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
 			}
 			return HttpResponseFactory.get302HttpResponse("/user/login.html");
 		}
