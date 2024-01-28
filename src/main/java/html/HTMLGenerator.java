@@ -83,22 +83,4 @@ public class HTMLGenerator {
 		}
 		return sb.toString().getBytes();
 	}
-
-	public static byte[] getSignUpHTML(String uri, String message) {
-		StringBuilder sb = new StringBuilder();
-
-		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+uri))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				if (line.contains("btn btn-success clearfix pull-right")) {
-					sb.append("<span style=\"color: red;font-weight: 500;\">").append(message).append("</span>");
-				}
-				sb.append(line).append("\n");
-			}
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-		}
-		return sb.toString().getBytes();
-	}
-
 }
