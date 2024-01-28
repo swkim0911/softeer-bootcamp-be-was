@@ -1,54 +1,71 @@
 package handler;
 
+import exception.InvalidSignUpException;
 import html.HTMLGenerator;
 import http.HttpRequest;
 import http.HttpResponse;
 import db.Database;
-import http.method.HttpMethod;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import session.SessionManager;
 import http.HttpResponseFactory;
 import util.FileUtils;
 import util.QueryStringParser;
-import util.UriParser;
+import webserver.RequestController;
 
 import java.util.Map;
 import java.util.Optional;
 
 import static http.method.HttpMethod.*;
-import static http.status.HttpStatusCode.METHOD_NOT_ALLOWED;
+import static http.status.HttpStatusCode.BAD_REQUEST;
+import static http.status.HttpStatusCode.NOT_FOUND;
 
 public class UserRequestHandler implements RequestHandler{
+
+	private static final Logger logger = LoggerFactory.getLogger(UserRequestHandler.class);
     @Override
     public HttpResponse handle(HttpRequest httpRequest, String findSessionId){
         String uri = httpRequest.getUri();
         if ("/user/create".equals(uri)) { // 회원가입
 			if(POST.equals(httpRequest.getMethod())){
-				Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
-				User user = User.create(queryParameters);
-				Database.addUser(user);
-				// index.html 으로 리다이렉트
-				return HttpResponseFactory.get302Response("/index.html");
+				try {
+					Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
+					User user = User.create(queryParameters);
+					Database.addUser(user);
+					// index.html 으로 리다이렉트
+					return HttpResponseFactory.get302Response("/index.html");
+				} catch (InvalidSignUpException e) {
+					logger.error("{}", e.getMessage());
+					return get400HttpResponse();
+				}
+
 			}
 			return get405HttpResponse(POST);
 		}
 
 		if ("/user/login".equals(uri)) { // 로그인
 			if (POST.equals(httpRequest.getMethod())) {
-				Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
-				User findUser = Database.findUserById(queryParameters.get("userId"));
+				try {
+					Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
+					User findUser = Database.findUserById(queryParameters.get("userId"));
 
-				if (findUser != null) { //아이디가 있는 경우 비밀번호 일치하는지 확인
-					String findUserId = findUser.getUserId();
-					String findUserPassword = findUser.getPassword();
+					if (findUser != null) { //아이디가 있는 경우 비밀번호 일치하는지 확인
+						String findUserId = findUser.getUserId();
+						String findUserPassword = findUser.getPassword();
 
-					if (verifyPassword(findUserPassword, queryParameters.get("password"))) {
-						String sessionId = SessionManager.generateSessionId(findUserId);
-						return HttpResponseFactory.get302LoginResponse("/index.html", sessionId);
+						if (verifyPassword(findUserPassword, queryParameters.get("password"))) {
+							String sessionId = SessionManager.generateSessionId(findUserId);
+							return HttpResponseFactory.get302LoginResponse("/index.html", sessionId);
+						}
 					}
+					// 아이디가 없는 경우
+					return HttpResponseFactory.get302Response("/user/login_failed.html");
+				} catch (InvalidSignUpException e) {
+					logger.error("{}", e.getMessage());
+					return get400HttpResponse();
 				}
-				// 아이디가 없는 경우
-				return HttpResponseFactory.get302Response("/user/login_failed.html");
+
 			}
 			return get405HttpResponse(POST);
 		}

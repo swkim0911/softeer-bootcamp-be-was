@@ -4,16 +4,9 @@ import html.HTMLGenerator;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.HttpResponseFactory;
-import http.method.HttpMethod;
-import http.status.HttpStatusCode;
 import model.User;
-import util.FileUtils;
-import util.UriParser;
-
-import java.util.Optional;
 
 import static http.method.HttpMethod.*;
-import static http.status.HttpStatusCode.*;
 
 
 public class HomeRequestHandler implements RequestHandler{

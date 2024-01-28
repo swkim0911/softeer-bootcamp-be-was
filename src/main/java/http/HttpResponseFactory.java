@@ -35,6 +35,15 @@ public class HttpResponseFactory {
 			.body(new byte[0])
 			.build();
 	}
+
+	public static HttpResponse get400Response(String uri, byte[] body) {
+		Map<String, String> headerFields = setHeader(uri, body);
+		return new HttpResponseBuilder()
+			.status(BAD_REQUEST)
+			.headerFields(headerFields)
+			.body(body)
+			.build();
+	}
 	public static HttpResponse get404Response(String uri, byte[] body) {
 		Map<String, String> headerFields = setHeader(uri, body);
 		return new HttpResponseBuilder()
