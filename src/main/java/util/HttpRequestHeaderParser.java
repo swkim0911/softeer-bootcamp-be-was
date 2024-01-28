@@ -35,7 +35,7 @@ public class HttpRequestHeaderParser {
 	}
     private static void putMethodField(String[] splitRequestLine, Map<String, String> requestLineMap) {
         String method = splitRequestLine[0];
-        requestLineMap.put("Method", method);
+        requestLineMap.put("method", method);
     }
     private static void putUriField(String uri, Map<String, String> requestHeaderMap) {
         String requestUri;
@@ -47,7 +47,7 @@ public class HttpRequestHeaderParser {
         }else{
             requestUri = uri;
         }
-        requestHeaderMap.put("RequestUri", requestUri);
-        requestHeaderMap.put("QueryString", queryString);
+        requestHeaderMap.put("requestUri", requestUri);
+        requestHeaderMap.put("queryString", queryString);
     }
 }

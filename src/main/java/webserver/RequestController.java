@@ -26,6 +26,7 @@ public class RequestController implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			HttpRequest httpRequest = HttpRequestFactory.getRequest(in);
 			logger.debug("{}", httpRequest);
+			//todo 세션있는지 확인 로직 추가
 			HttpResponse httpResponse = handleRequest(httpRequest);
 			HttpResponseSender.send(httpResponse, out);
         } catch (IOException e) {

@@ -10,7 +10,7 @@ public class HttpRequest {
     private final String uri;
     private final String queryString; // 없는 경우 None
 	private final String version;
-    private final HttpRequestHeaders requestHeaders; //todo 일급 컬렉션으로 변경
+    private final HttpRequestHeaders requestHeaders;
 	private final String body; // 없는 경우 "" (empty)
 
     public HttpRequest(String method, String uri, String queryString, Map<String, String> headerFields, String body) {
@@ -48,14 +48,14 @@ public class HttpRequest {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Method: ").append(method).append("\n");
-		sb.append("Uri: ").append(uri).append("\n");
-		sb.append("Query-String: ").append(queryString).append("\n");
-		sb.append("Version: ").append(version).append("\n");
+		sb.append("method: ").append(method).append("\n");
+		sb.append("uri: ").append(uri).append("\n");
+		sb.append("query-string: ").append(queryString).append("\n");
+		sb.append("version: ").append(version).append("\n");
 		for (Map.Entry<String, String> entry : requestHeaders.getAllHeader()) {
 			sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
 		}
-		sb.append("Body: ").append(body);
+		sb.append("body: ").append(body);
 		return sb.toString().trim();
 	}
 }
