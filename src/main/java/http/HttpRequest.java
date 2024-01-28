@@ -1,19 +1,20 @@
 package http;
 
+import http.method.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class HttpRequest {
-    private final String method;
+    private final HttpMethod method;
     private final String uri;
     private final String queryString; // 없는 경우 None
 	private final String version;
     private final HttpRequestHeaders requestHeaders;
 	private final String body; // 없는 경우 "" (empty)
 
-    public HttpRequest(String method, String uri, String queryString, Map<String, String> headerFields, String body) {
+    public HttpRequest(HttpMethod method, String uri, String queryString, Map<String, String> headerFields, String body) {
         this.method = method;
         this.uri = uri;
         this.queryString = queryString;
@@ -22,7 +23,7 @@ public class HttpRequest {
         this.body = body;
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
@@ -48,7 +49,7 @@ public class HttpRequest {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("method: ").append(method).append("\n");
+		sb.append("method: ").append(method.toString()).append("\n");
 		sb.append("uri: ").append(uri).append("\n");
 		sb.append("query-string: ").append(queryString).append("\n");
 		sb.append("version: ").append(version).append("\n");
