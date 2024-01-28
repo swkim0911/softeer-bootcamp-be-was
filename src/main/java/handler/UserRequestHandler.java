@@ -4,7 +4,6 @@ import html.HTMLGenerator;
 import http.HttpRequest;
 import http.HttpResponse;
 import db.Database;
-import http.status.HttpStatusCode;
 import model.User;
 import session.SessionManager;
 import http.HttpResponseFactory;
@@ -17,15 +16,15 @@ public class UserRequestHandler implements RequestHandler{
     @Override
     public HttpResponse handle(HttpRequest httpRequest, String findSessionId){
         String uri = httpRequest.getUri();
-        if (uri.equals("/user/create")) { // 회원가입
+        if ("/user/create".equals(uri)) { // 회원가입
 			Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
             User user = User.create(queryParameters);
             Database.addUser(user);
 			// index.html 으로 리다이렉트
-			return HttpResponseFactory.get302HttpResponse("/index.html");
+			return HttpResponseFactory.get302Response("/index.html");
         }
 
-		if (uri.equals("/user/login")) { // 로그인
+		if ("/user/login".equals(uri)) { // 로그인
 			Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
 			User findUser = Database.findUserById(queryParameters.get("userId"));
 
@@ -35,27 +34,27 @@ public class UserRequestHandler implements RequestHandler{
 
 				if (verifyPassword(findUserPassword, queryParameters.get("password"))) {
 					String sessionId = SessionManager.generateSessionId(findUserId);
-					return HttpResponseFactory.get302HttpResponse("/index.html", sessionId);
+					return HttpResponseFactory.get302LoginResponse("/index.html", sessionId);
 				}
 			}
 			// 아이디가 없는 경우
-			return HttpResponseFactory.get302HttpResponse("/user/login_failed.html");
+			return HttpResponseFactory.get302Response("/user/login_failed.html");
 		}
 
-		if (uri.equals("/user/list.html")) { // 사용자 목록
+		if ("/user/list.html".equals(uri)) { // 사용자 목록
 			User findUser = getUserBySession(findSessionId);
 			if (findUser != null) {
 				byte[] userListHTML = HTMLGenerator.getUserListHTML(findUser.getName());
-				return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
+				return HttpResponseFactory.get200Response(uri, userListHTML);
 			}
-			return HttpResponseFactory.get302HttpResponse("/user/login.html");
+			return HttpResponseFactory.get302Response("/user/login.html");
 		}
 
 		if (isHTML(uri)) {
 			User findUser = getUserBySession(findSessionId);
 			if (findUser != null) { // 세션 ID로 User 찾은 경우
 				byte[] HTML = HTMLGenerator.getHTML(findUser.getName(), uri);
-				return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), HTML);
+				return HttpResponseFactory.get200Response(uri, HTML);
 			}
 		}
 		return getHttpResponse(uri);

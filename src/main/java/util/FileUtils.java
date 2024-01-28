@@ -16,7 +16,7 @@ public class FileUtils {
     public static Optional<byte[]> readFile(String uri) {
         String fileType = UriParser.getFileType(uri);
         try {
-            if (fileType.equals("html")) {
+            if ("html".equals(fileType)) {
                 return Optional.of(readFileBytes(HTML_PATH + uri));
             }
 			return Optional.of(readFileBytes(RESOURCE_PATH + uri));
