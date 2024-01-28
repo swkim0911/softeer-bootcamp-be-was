@@ -13,22 +13,20 @@ import java.util.Collection;
 public class HTMLGenerator {
 	private static final Logger logger = LoggerFactory.getLogger(HTMLGenerator.class);
 	private static final String FILE_PATH = "src/main/resources/templates";
-	private static final int INDENTATION_LENGTH = 3;
 
-	public static byte[] getHomeHTML(String userName) {
+	public static byte[] getHTML(String userName, String uri) {
 		StringBuilder sb = new StringBuilder();
 
-		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+"/index.html"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+uri))) {
 			String line;
 			while ((line = br.readLine()) != null) {
+				//로그인 버튼 로그아웃 버튼으로 바꿈
 				if (line.contains("login-button")) {
 					line = line.replace("로그인", "로그아웃");
 					line = line.replace("user/login.html", "#");
-
 				}
+				// 사용자 이름 표시
 				if (line.contains("navbar-name-space")) {
-					int indent = getIndent(line);
-					sb.append(" ".repeat(Math.max(0, indent))); // 윗 줄과 3칸 indentation
 					sb.append("<li><span class=\"navbar-text\" style=\"font-weight: 600;\">");
 					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
 				}
@@ -40,18 +38,24 @@ public class HTMLGenerator {
 		return sb.toString().getBytes();
 	}
 
-	private static int getIndent(String line) {
-		String trimLine = line.trim();
-        return line.length() - trimLine.length() + INDENTATION_LENGTH;
-	}
-
-	public static byte[] getUserListHTML() {
+	public static byte[] getUserListHTML(String userName) {
 		StringBuilder sb = new StringBuilder();
 
 		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+"/user/list.html"))) {
 			String line;
 			while ((line = br.readLine()) != null) {
+				//로그인 버튼 로그아웃 버튼으로 바꿈
+				if (line.contains("login-button")) {
+					line = line.replace("로그인", "로그아웃");
+					line = line.replace("user/login.html", "#");
+				}
+				// 사용자 이름 표시
+				if (line.contains("navbar-name-space")) {
+					sb.append("<li><span class=\"navbar-text\" style=\"font-weight: 600;\">");
+					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
+				}
 				sb.append(line).append("\n");
+				//테이블 생성
 				if (line.contains("user-table")) {
 					sb.append("<thead>").append("\n");
 					sb.append("<tr>").append("\n");
@@ -71,7 +75,7 @@ public class HTMLGenerator {
 						sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>").append("\n");
 						sb.append("</tr>").append("\n");
 					}
-					sb.append("              </tbody>").append("\n");
+					sb.append("</tbody>").append("\n");
 				}
 			}
 		} catch (IOException e) {

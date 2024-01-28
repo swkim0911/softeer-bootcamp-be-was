@@ -45,10 +45,18 @@ public class UserRequestHandler implements RequestHandler{
 		if (uri.equals("/user/list.html")) { // 사용자 목록
 			User findUser = getUserBySession(findSessionId);
 			if (findUser != null) {
-				byte[] userListHTML = HTMLGenerator.getUserListHTML();
+				byte[] userListHTML = HTMLGenerator.getUserListHTML(findUser.getName());
 				return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), userListHTML);
 			}
 			return HttpResponseFactory.get302HttpResponse("/user/login.html");
+		}
+
+		if (isHTML(uri)) {
+			User findUser = getUserBySession(findSessionId);
+			if (findUser != null) { // 세션 ID로 User 찾은 경우
+				byte[] HTML = HTMLGenerator.getHTML(findUser.getName(), uri);
+				return HttpResponseFactory.getHttpResponse(HttpStatusCode.OK, UriParser.getFileType(uri), HTML);
+			}
 		}
 		return getHttpResponse(uri);
     }
