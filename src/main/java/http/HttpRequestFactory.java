@@ -32,7 +32,7 @@ public class HttpRequestFactory {
         StringBuilder sb = new StringBuilder();
 		String line = br.readLine();
 		sb.append(line).append("\r\n");
-		while (!line.isEmpty()) { //마지막 라인 = ""(empty)
+		while (line != null && !line.isEmpty()) { //마지막 라인 = ""(empty)
 			line = br.readLine();
 			sb.append(line).append("\r\n");
 		}

@@ -1,6 +1,7 @@
 package http;
 
 import http.builder.HttpResponseBuilder;
+import http.method.HttpMethod;
 import util.UriParser;
 import util.mapper.ContentTypeMapper;
 
@@ -42,6 +43,27 @@ public class HttpResponseFactory {
 			.body(body)
 			.build();
 	}
+
+	public static HttpResponse get405Response(String uri, byte[] body, HttpMethod requiredMethod) {
+		Map<String, String> headerFields = set405Header(uri, body, requiredMethod);
+		return new HttpResponseBuilder()
+			.status(METHOD_NOT_ALLOWED)
+			.headerFields(headerFields)
+			.body(body)
+			.build();
+	}
+
+	private static Map<String, String> set405Header(String uri, byte[] body, HttpMethod requiredMethod) {
+		Map<String, String> headerFields = new HashMap<>();
+		String fileType = UriParser.getFileType(uri);
+		String contentType = ContentTypeMapper.getContentType(fileType);
+		headerFields.put("Content-Type", contentType + ";charset=utf-8");
+		headerFields.put("Content-Length", String.valueOf(body.length));
+		headerFields.put("Allow", requiredMethod.toString());
+		return headerFields;
+	}
+
+
     private static Map<String, String> setHeader(String uri, byte[] body) {
         Map<String, String> headerFields = new HashMap<>();
 		String fileType = UriParser.getFileType(uri);

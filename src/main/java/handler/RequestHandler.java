@@ -3,6 +3,8 @@ package handler;
 import db.Database;
 import http.HttpRequest;
 import http.HttpResponse;
+import http.method.HttpMethod;
+import http.status.HttpStatusCode;
 import model.User;
 import session.SessionManager;
 import util.FileUtils;
@@ -10,6 +12,8 @@ import http.HttpResponseFactory;
 import util.UriParser;
 
 import java.util.Optional;
+
+import static http.status.HttpStatusCode.*;
 
 public interface RequestHandler {
     HttpResponse handle(HttpRequest httpRequest, String findSessionId);
@@ -22,9 +26,14 @@ public interface RequestHandler {
 		//body가 empty라면 404 페이지 전송
 		body = FileUtils.readFile("/error/404.html");
 		//404 페이지를 찾을 수 없으면 "404 NOT FOUND" 문자열 전송
-		return HttpResponseFactory.get404Response(uri, body.orElse("404 NOT FOUND".getBytes()));
+		return HttpResponseFactory.get404Response(uri, body.orElse(NOT_FOUND.toString().getBytes()));
     }
 
+	default HttpResponse get405HttpResponse(HttpMethod method) {
+		String uri = "/error/405.html";
+		Optional<byte[]> body = FileUtils.readFile(uri);
+		return HttpResponseFactory.get405Response(uri, body.orElse(METHOD_NOT_ALLOWED.toString().getBytes()), method);
+	}
 	default boolean isHTML(String uri) {
 		String fileType = UriParser.getFileType(uri);
 		return fileType.equals("html");
