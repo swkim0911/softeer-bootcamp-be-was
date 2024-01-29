@@ -64,6 +64,18 @@ public class UserRequestHandler implements RequestHandler{
 			}
 			return get405HttpResponse(POST);
 		}
+
+		if ("/user/logout".equals(uri)) { // 로그아웃
+			if (GET.equals(httpRequest.getMethod())) {
+				User findUser = getUserBySession(findSessionId);
+				SessionManager.removeSession(findSessionId); // 로그아웃으로 세션 삭제
+				if (findUser != null) {
+					return HttpResponseFactory.get302LogoutResponse("/index.html", findSessionId);
+				}
+			}
+			return get405HttpResponse(GET);
+		}
+
 		if (GET.equals(httpRequest.getMethod())) {
 			if ("/user/list".equals(uri)) { // 사용자 목록
 				User findUser = getUserBySession(findSessionId);

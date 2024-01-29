@@ -14,7 +14,6 @@ public class SessionManager {
 		sessionIdMap.put(sessionId, userId);
 		return sessionId;
 	}
-
 	public static boolean containsSession(String sessionId) {
 		return sessionIdMap.containsKey(sessionId);
 	}
@@ -24,5 +23,9 @@ public class SessionManager {
 			return sessionIdMap.get(sessionId);
 		}
 		return null;
+	}
+
+	public static void removeSession(String sessionId) {
+		sessionIdMap.remove(sessionId);
 	}
 }

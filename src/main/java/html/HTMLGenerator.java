@@ -88,7 +88,7 @@ public class HTMLGenerator {
 				//로그인 버튼 로그아웃 버튼으로 바꿈
 				if (line.contains("login-button")) {
 					line = line.replace("로그인", "로그아웃");
-					line = line.replace("user/login.html", "#");
+					line = line.replace("user/login.html", "user/logout");
 				}
 				// 사용자 이름 표시
 				if (line.contains("navbar-name-space")) {

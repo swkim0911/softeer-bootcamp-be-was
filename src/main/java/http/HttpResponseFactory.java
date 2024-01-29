@@ -36,6 +36,15 @@ public class HttpResponseFactory {
 			.build();
 	}
 
+	public static HttpResponse get302LogoutResponse(String uri, String sessionId) {
+		Map<String, String> headerFields = set302LogoutHeader(uri, sessionId);
+		return new HttpResponseBuilder()
+			.status(FOUND)
+			.headerFields(headerFields)
+			.body(new byte[0])
+			.build();
+	}
+
 	public static HttpResponse get400Response(String uri, byte[] body) {
 		Map<String, String> headerFields = setHeader(uri, body);
 		return new HttpResponseBuilder()
@@ -77,10 +86,22 @@ public class HttpResponseFactory {
 	private static Map<String, String> set302LoginHeader(String uri, String sessionId){
 		Map<String, String> headerFields = new HashMap<>();
 		headerFields.put("Location", uri);
-		setCookie(sessionId, headerFields);
+		setLoginCookie(sessionId, headerFields);
 		return headerFields;
 	}
-	private static void setCookie(String sessionId, Map<String, String> headerFields) {
+
+	private static Map<String, String> set302LogoutHeader(String uri, String sessionId){
+		Map<String, String> headerFields = new HashMap<>();
+		headerFields.put("Location", uri);
+		setLogoutCookie(sessionId, headerFields);
+		return headerFields;
+	}
+
+	private static void setLogoutCookie(String sessionId, Map<String, String> headerFields) {
+		String cookie = "SID=" + sessionId + "; Path=/; Max-Age=0";
+		headerFields.put("Set-Cookie", cookie);
+	}
+	private static void setLoginCookie(String sessionId, Map<String, String> headerFields) {
 		String cookie = "SID=" + sessionId + "; Path=/";
 		headerFields.put("Set-Cookie", cookie);
 	}
