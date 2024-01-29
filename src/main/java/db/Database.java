@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Database {
     private static Map<String, User> users = Maps.newHashMap();
-	private static Map<String, Board> boards = Maps.newHashMap();
+	private static Map<Long, Board> boards = Maps.newHashMap();
 
     public static void addUser(User user) {
         users.put(user.getUserId(), user);
@@ -32,7 +32,7 @@ public class Database {
 		boards.put(board.getBoardId(), board);
 	}
 
-	public static Board findBoardById(String userId) {
+	public static Board findBoardById(Long userId) {
 		return boards.get(userId); //hashmap 때문에 key가 null이면 null 반환
 	}
 

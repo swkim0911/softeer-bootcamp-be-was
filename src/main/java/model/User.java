@@ -12,7 +12,7 @@ public class User {
         return new User(queryParameters.get("userId"), queryParameters.get("password"), queryParameters.get("name"), queryParameters.get("email"));
     }
 
-    public User(String userId, String password, String name, String email) {
+    private User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
         this.name = name;

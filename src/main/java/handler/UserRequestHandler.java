@@ -65,7 +65,7 @@ public class UserRequestHandler implements RequestHandler{
 			return get405HttpResponse(POST);
 		}
 		if (GET.equals(httpRequest.getMethod())) {
-			if ("/user/list".equals(uri)) { // 사용자 목록 //todo /user/list 로 변경하기
+			if ("/user/list".equals(uri)) { // 사용자 목록
 				User findUser = getUserBySession(findSessionId);
 				if (findUser != null) {
 					byte[] userListHTML = HTMLGenerator.getUserListHTML(findUser.getName());

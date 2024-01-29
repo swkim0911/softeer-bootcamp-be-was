@@ -1,15 +1,19 @@
 package handler;
 
+import db.Database;
+import dto.BoardDto;
 import exception.InvalidInputException;
 import html.HTMLGenerator;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.HttpResponseFactory;
+import model.Board;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.QueryStringParser;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import static http.method.HttpMethod.POST;
@@ -24,7 +28,9 @@ public class BoardRequestHandler implements RequestHandler{
 			if(POST.equals(httpRequest.getMethod())){
 				try {
 					Map<String, String> queryParameters = QueryStringParser.getParameters(httpRequest.getBody());
-					//todo 게시판 db에 저장
+					BoardDto boardDto = new BoardDto(queryParameters, LocalDate.now());
+					Board board = Board.create(boardDto);
+					Database.addBoard(board);
 					return HttpResponseFactory.get302Response("/index.html");
 				} catch (InvalidInputException e) {
 					logger.error("{}", e.getMessage());
