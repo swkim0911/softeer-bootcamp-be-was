@@ -65,7 +65,7 @@ public class HTMLGenerator {
 					sb.append("<tbody>").append("\n");
 					// 디비에서 읽으면서 사용자 리스트 뿌리기
 					int count = 0;
-					Collection<User> users = Database.findAll();
+					Collection<User> users = Database.findAllUser();
 					for (User user : users) {
 						sb.append("<tr>").append("\n");
 						sb.append("<th scope=\"row\">").append(++count).append("</th>");

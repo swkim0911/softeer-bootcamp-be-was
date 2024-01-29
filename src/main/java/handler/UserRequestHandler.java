@@ -1,6 +1,6 @@
 package handler;
 
-import exception.InvalidSignUpException;
+import exception.InvalidInputException;
 import html.HTMLGenerator;
 import http.HttpRequest;
 import http.HttpResponse;
@@ -10,16 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import session.SessionManager;
 import http.HttpResponseFactory;
-import util.FileUtils;
 import util.QueryStringParser;
-import webserver.RequestController;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static http.method.HttpMethod.*;
-import static http.status.HttpStatusCode.BAD_REQUEST;
-import static http.status.HttpStatusCode.NOT_FOUND;
 
 public class UserRequestHandler implements RequestHandler{
 
@@ -35,7 +30,7 @@ public class UserRequestHandler implements RequestHandler{
 					Database.addUser(user);
 					// index.html 으로 리다이렉트
 					return HttpResponseFactory.get302Response("/index.html");
-				} catch (InvalidSignUpException e) {
+				} catch (InvalidInputException e) {
 					logger.error("{}", e.getMessage());
 					return get400HttpResponse();
 				}
@@ -61,7 +56,7 @@ public class UserRequestHandler implements RequestHandler{
 					}
 					// 아이디가 없는 경우
 					return HttpResponseFactory.get302Response("/user/login_failed.html");
-				} catch (InvalidSignUpException e) {
+				} catch (InvalidInputException e) {
 					logger.error("{}", e.getMessage());
 					return get400HttpResponse();
 				}
@@ -70,7 +65,7 @@ public class UserRequestHandler implements RequestHandler{
 			return get405HttpResponse(POST);
 		}
 		if (GET.equals(httpRequest.getMethod())) {
-			if ("/user/list.html".equals(uri)) { // 사용자 목록
+			if ("/user/list.html".equals(uri)) { // 사용자 목록 //todo /user/list 로 변경하기
 				User findUser = getUserBySession(findSessionId);
 				if (findUser != null) {
 					byte[] userListHTML = HTMLGenerator.getUserListHTML(findUser.getName());

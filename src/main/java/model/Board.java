@@ -3,14 +3,14 @@ package model;
 import java.time.LocalDate;
 
 public class Board {
-	private String boarId;
+	private String boardId;
 	private String writer;
 	private String title;
 	private String contents;
 	private LocalDate createdDate;
 
-	public String getBoarId() {
-		return boarId;
+	public String getBoardId() {
+		return boardId;
 	}
 
 	public String getWriter() {

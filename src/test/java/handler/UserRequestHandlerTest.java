@@ -19,7 +19,7 @@ class UserRequestHandlerTest {
 
 	@AfterEach
 	void after() {
-		Database.removeAll();
+		Database.removeAllUser();
 	}
 	@Test
 	@DisplayName("회원가입 요청시 사용자 정보 db 저장 성공 테스트")

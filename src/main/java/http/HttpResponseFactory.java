@@ -61,18 +61,6 @@ public class HttpResponseFactory {
 			.body(body)
 			.build();
 	}
-
-	private static Map<String, String> set405Header(String uri, byte[] body, HttpMethod requiredMethod) {
-		Map<String, String> headerFields = new HashMap<>();
-		String fileType = UriParser.getFileType(uri);
-		String contentType = ContentTypeMapper.getContentType(fileType);
-		headerFields.put("Content-Type", contentType + ";charset=utf-8");
-		headerFields.put("Content-Length", String.valueOf(body.length));
-		headerFields.put("Allow", requiredMethod.toString());
-		return headerFields;
-	}
-
-
     private static Map<String, String> setHeader(String uri, byte[] body) {
         Map<String, String> headerFields = new HashMap<>();
 		String fileType = UriParser.getFileType(uri);
@@ -95,5 +83,14 @@ public class HttpResponseFactory {
 	private static void setCookie(String sessionId, Map<String, String> headerFields) {
 		String cookie = "SID=" + sessionId + "; Path=/";
 		headerFields.put("Set-Cookie", cookie);
+	}
+	private static Map<String, String> set405Header(String uri, byte[] body, HttpMethod requiredMethod) {
+		Map<String, String> headerFields = new HashMap<>();
+		String fileType = UriParser.getFileType(uri);
+		String contentType = ContentTypeMapper.getContentType(fileType);
+		headerFields.put("Content-Type", contentType + ";charset=utf-8");
+		headerFields.put("Content-Length", String.valueOf(body.length));
+		headerFields.put("Allow", requiredMethod.toString());
+		return headerFields;
 	}
 }
