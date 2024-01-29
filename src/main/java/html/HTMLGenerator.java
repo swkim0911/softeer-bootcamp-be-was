@@ -56,6 +56,7 @@ public class HTMLGenerator {
 					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
 				}
 				sb.append(line).append("\n");
+				// 게시판 리스트
 				if (line.contains("board-list")) {
 					Collection<Board> boards = Database.findAllBoard();
 					for (Board board : boards) {
@@ -63,7 +64,7 @@ public class HTMLGenerator {
 						sb.append("<div class=\"wrap\">").append("\n");
 						sb.append("<div class=\"main\">").append("\n");
 						sb.append("<strong class=\"subject\">").append("\n");
-						sb.append("<a href=\"board/show.html\">").append(board.getTitle()).append("</a>").append("\n"); //todo
+						sb.append("<a href=\"board/show.html\">").append(board.getTitle()).append("</a>").append("\n");
 						sb.append("</strong>").append("\n");
 						sb.append("<div class=\"auth-info\">").append("\n");
 						sb.append("<i class=\"icon-add-comment\"></i>").append("\n");
