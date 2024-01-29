@@ -32,8 +32,8 @@ public class Database {
 		boards.put(board.getBoardId(), board);
 	}
 
-	public static Board findBoardById(Long userId) {
-		return boards.get(userId); //hashmap 때문에 key가 null이면 null 반환
+	public static Board findBoardById(Long boardId) {
+		return boards.get(boardId); //hashmap 때문에 key가 null이면 null 반환
 	}
 
 	public static Collection<Board> findAllBoard() {

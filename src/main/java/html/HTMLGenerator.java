@@ -39,6 +39,48 @@ public class HTMLGenerator {
 		return sb.toString().getBytes();
 	}
 
+	public static byte[] getBoardHTML(String userName, Long boardId) {
+		StringBuilder sb = new StringBuilder();
+		Board findBoard = Database.findBoardById(boardId);
+
+		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+"/board/show.html"))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				//로그인 버튼 로그아웃 버튼으로 바꿈
+				if (line.contains("login-button")) {
+					line = line.replace("로그인", "로그아웃");
+					line = line.replace("user/login.html", "#");
+				}
+				// 사용자 이름 표시
+				if (line.contains("navbar-name-space")) {
+					sb.append("<li><span class=\"navbar-text\" style=\"font-weight: 600;\">");
+					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
+				}
+
+				if (line.contains("{board-title}")) {
+					line = line.replace("{board-title}", findBoard.getTitle());
+				}
+
+				if (line.contains("{board-writer}")) {
+					line = line.replace("{board-writer}", findBoard.getWriter());
+				}
+
+				if (line.contains("{created-date}")) {
+					line = line.replace("{created-date}", findBoard.getCreatedDate().toString());
+				}
+
+				if (line.contains("{contents}")) {
+					line = line.replace("{contents}", findBoard.getContents());
+				}
+
+				sb.append(line).append("\n");
+			}
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+		return sb.toString().getBytes();
+	}
+
 	public static byte[] getHomeHTML() {
 		StringBuilder sb = new StringBuilder();
 
@@ -55,7 +97,7 @@ public class HTMLGenerator {
 						sb.append("<div class=\"wrap\">").append("\n");
 						sb.append("<div class=\"main\">").append("\n");
 						sb.append("<strong class=\"subject\">").append("\n");
-						sb.append("<a href=\"board/show.html\">").append(board.getTitle()).append("</a>").append("\n");
+						sb.append("<a href=\"board/show.html").append("?boardId=").append(board.getBoardId()).append("\">").append(board.getTitle()).append("</a>").append("\n");
 						sb.append("</strong>").append("\n");
 						sb.append("<div class=\"auth-info\">").append("\n");
 						sb.append("<i class=\"icon-add-comment\"></i>").append("\n");
@@ -104,7 +146,7 @@ public class HTMLGenerator {
 						sb.append("<div class=\"wrap\">").append("\n");
 						sb.append("<div class=\"main\">").append("\n");
 						sb.append("<strong class=\"subject\">").append("\n");
-						sb.append("<a href=\"board/show.html\">").append(board.getTitle()).append("</a>").append("\n");
+						sb.append("<a href=\"board/show.html").append("?boardId=").append(board.getBoardId()).append("\">").append(board.getTitle()).append("</a>").append("\n");
 						sb.append("</strong>").append("\n");
 						sb.append("<div class=\"auth-info\">").append("\n");
 						sb.append("<i class=\"icon-add-comment\"></i>").append("\n");
