@@ -20,7 +20,7 @@ public class HomeRequestHandler implements RequestHandler{
 			if (isHTML(uri)) {
 				User findUser = getUserBySession(findSessionId);
 				if (findUser != null) { // 세션 ID로 User 찾은 경우
-					byte[] HTML = HTMLGenerator.getHTML(findUser.getName(), uri);
+					byte[] HTML = HTMLGenerator.getHomeHTML(findUser.getName());
 					return HttpResponseFactory.get200Response(uri, HTML);
 				}
 			}

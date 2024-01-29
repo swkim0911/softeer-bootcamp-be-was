@@ -1,6 +1,7 @@
 package html;
 
 import db.Database;
+import model.Board;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,53 @@ public class HTMLGenerator {
 					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
 				}
 				sb.append(line).append("\n");
+			}
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+		return sb.toString().getBytes();
+	}
+
+	public static byte[] getHomeHTML(String userName) {
+		StringBuilder sb = new StringBuilder();
+
+		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+"/index.html"))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				//로그인 버튼 로그아웃 버튼으로 바꿈
+				if (line.contains("login-button")) {
+					line = line.replace("로그인", "로그아웃");
+					line = line.replace("user/login.html", "#");
+				}
+				// 사용자 이름 표시
+				if (line.contains("navbar-name-space")) {
+					sb.append("<li><span class=\"navbar-text\" style=\"font-weight: 600;\">");
+					sb.append(userName).append(" 님 안녕하세요").append("</span></li>").append("\n");
+				}
+				sb.append(line).append("\n");
+				if (line.contains("board-list")) {
+					Collection<Board> boards = Database.findAllBoard();
+					for (Board board : boards) {
+						sb.append("<li>").append("\n");
+						sb.append("<div class=\"wrap\">").append("\n");
+						sb.append("<div class=\"main\">").append("\n");
+						sb.append("<strong class=\"subject\">").append("\n");
+						sb.append("<a href=\"board/show.html\">").append(board.getTitle()).append("</a>").append("\n"); //todo
+						sb.append("</strong>").append("\n");
+						sb.append("<div class=\"auth-info\">").append("\n");
+						sb.append("<i class=\"icon-add-comment\"></i>").append("\n");
+						sb.append("<span class=\"time\">").append(board.getCreatedDate()).append("</span>").append("\n");
+						sb.append("<b>").append(board.getWriter()).append("</b>").append("\n");
+						sb.append("</div>").append("\n");
+						sb.append("<div class=\"reply\" title=\"글 번호\">").append("\n");
+						sb.append("<i class=\"icon-reply\"></i>").append("\n");
+						sb.append("<span class=\"point\">").append(board.getBoardId()).append("</span>").append("\n");
+						sb.append("</div").append("\n");
+						sb.append("</div").append("\n");
+						sb.append("</div").append("\n");
+						sb.append("</li>").append("\n");
+					}
+				}
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage());

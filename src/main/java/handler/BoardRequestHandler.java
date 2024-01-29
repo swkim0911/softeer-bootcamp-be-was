@@ -43,7 +43,7 @@ public class BoardRequestHandler implements RequestHandler{
 		if ("/board/write.html".equals(uri)) { // 사용자 목록
 			User findUser = getUserBySession(findSessionId);
 			if (findUser != null) {
-				byte[] userListHTML = HTMLGenerator.getHTML(findUser.getName(), "/board/write.html");
+				byte[] userListHTML = HTMLGenerator.getHTML(findUser.getName(), "/board/write.html"); //todo 동적으로 생성 안되는데?
 				return HttpResponseFactory.get200Response(uri, userListHTML);
 			}
 			return HttpResponseFactory.get302Response("/user/login.html");
