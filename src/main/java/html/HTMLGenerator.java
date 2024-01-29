@@ -39,7 +39,47 @@ public class HTMLGenerator {
 		return sb.toString().getBytes();
 	}
 
-	public static byte[] getHomeHTML(String userName) {
+	public static byte[] getHomeHTML() {
+		StringBuilder sb = new StringBuilder();
+
+		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+"/index.html"))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+
+				sb.append(line).append("\n");
+				// 게시판 리스트
+				if (line.contains("board-list")) {
+					Collection<Board> boards = Database.findAllBoard();
+					for (Board board : boards) {
+						sb.append("<li>").append("\n");
+						sb.append("<div class=\"wrap\">").append("\n");
+						sb.append("<div class=\"main\">").append("\n");
+						sb.append("<strong class=\"subject\">").append("\n");
+						sb.append("<a href=\"board/show.html\">").append(board.getTitle()).append("</a>").append("\n");
+						sb.append("</strong>").append("\n");
+						sb.append("<div class=\"auth-info\">").append("\n");
+						sb.append("<i class=\"icon-add-comment\"></i>").append("\n");
+						sb.append("<span class=\"time\">").append(board.getCreatedDate()).append("</span>").append("\n");
+						sb.append("<b>").append(board.getWriter()).append("</b>").append("\n");
+						sb.append("</div>").append("\n");
+						sb.append("<div class=\"reply\" title=\"글 번호\">").append("\n");
+						sb.append("<i class=\"icon-reply\"></i>").append("\n");
+						sb.append("<span class=\"point\">").append(board.getBoardId()).append("</span>").append("\n");
+						sb.append("</div").append("\n");
+						sb.append("</div").append("\n");
+						sb.append("</div").append("\n");
+						sb.append("</li>").append("\n");
+					}
+				}
+			}
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+		return sb.toString().getBytes();
+
+	}
+
+	public static byte[] getLoginHomeHTML(String userName) {
 		StringBuilder sb = new StringBuilder();
 
 		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH+"/index.html"))) {
