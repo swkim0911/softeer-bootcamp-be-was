@@ -3,6 +3,7 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 
+import handler.BoardRequestHandler;
 import http.HttpRequest;
 import http.HttpRequestFactory;
 import http.HttpResponse;
@@ -39,9 +40,13 @@ public class RequestController implements Runnable {
         RequestHandler requestHandler;
         if (uri.startsWith("/user")) {
             requestHandler = new UserRequestHandler();
-        }else{
-            requestHandler = new HomeRequestHandler();
+			return requestHandler.handle(httpRequest, findSessionId);
         }
-        return requestHandler.handle(httpRequest, findSessionId);
+		if (uri.startsWith("/board")) {
+			requestHandler = new BoardRequestHandler();
+			return requestHandler.handle(httpRequest, findSessionId);
+		}
+		requestHandler = new HomeRequestHandler();
+		return requestHandler.handle(httpRequest, findSessionId);
     }
 }
