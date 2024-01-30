@@ -16,6 +16,7 @@ import util.QueryStringParser;
 import java.time.LocalDate;
 import java.util.Map;
 
+import static http.method.HttpMethod.GET;
 import static http.method.HttpMethod.POST;
 
 
@@ -36,28 +37,36 @@ public class BoardRequestHandler implements RequestHandler{
 					logger.error("{}", e.getMessage());
 					return get400HttpResponse();
 				}
-
 			}
 			return get405HttpResponse(POST);
 		}
+
 		if ("/board/write.html".equals(uri)) { // 사용자 목록
-			User findUser = getUserBySession(findSessionId);
-			if (findUser != null) {
-				byte[] HTML = HTMLGenerator.getHTML(findUser.getName(), "/board/write.html");
-				return HttpResponseFactory.get200Response(uri, HTML);
+			if (GET.equals(httpRequest.getMethod())) {
+				User findUser = getUserBySession(findSessionId);
+				if (findUser != null) {
+					byte[] HTML = HTMLGenerator.getHTML(findUser.getName(), "/board/write.html");
+					return HttpResponseFactory.get200Response(uri, HTML);
+				}
+				return HttpResponseFactory.get302Response("/user/login.html");
 			}
-			return HttpResponseFactory.get302Response("/user/login.html");
+			return get405HttpResponse(GET);
 		}
+
 		if ("/board/show.html".equals(uri)) {
-			User findUser = getUserBySession(findSessionId);
-			if (findUser != null) {
-				String queryString = httpRequest.getQueryString();
-				Long boardId = Long.parseLong(queryString.split("=")[1]);
-				byte[] HTML = HTMLGenerator.getBoardHTML(findUser.getName(), boardId);
-				return HttpResponseFactory.get200Response(uri, HTML);
+			if (GET.equals(httpRequest.getMethod())) {
+				User findUser = getUserBySession(findSessionId);
+				if (findUser != null) {
+					String queryString = httpRequest.getQueryString();
+					Long boardId = Long.parseLong(queryString.split("=")[1]);
+					byte[] HTML = HTMLGenerator.getBoardHTML(findUser.getName(), boardId);
+					return HttpResponseFactory.get200Response(uri, HTML);
+				}
+				return HttpResponseFactory.get302Response("/user/login.html"); // 로그인하지 않은 경우
 			}
-			return HttpResponseFactory.get302Response("/user/login.html"); // 로그인하지 않은 경우
+			return get405HttpResponse(GET);
 		}
+
 		return getHttpResponse(uri);
 	}
 }

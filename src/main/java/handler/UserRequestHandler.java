@@ -22,6 +22,7 @@ public class UserRequestHandler implements RequestHandler{
     @Override
     public HttpResponse handle(HttpRequest httpRequest, String findSessionId){
         String uri = httpRequest.getUri();
+
         if ("/user/create".equals(uri)) { // 회원가입
 			if(POST.equals(httpRequest.getMethod())){
 				try {
@@ -76,8 +77,8 @@ public class UserRequestHandler implements RequestHandler{
 			return get405HttpResponse(GET);
 		}
 
-		if (GET.equals(httpRequest.getMethod())) {
-			if ("/user/list".equals(uri)) { // 사용자 목록
+		if ("/user/list".equals(uri)) { // 사용자 목록
+			if (GET.equals(httpRequest.getMethod())) {
 				User findUser = getUserBySession(findSessionId);
 				if (findUser != null) {
 					byte[] userListHTML = HTMLGenerator.getUserListHTML(findUser.getName());
@@ -85,17 +86,22 @@ public class UserRequestHandler implements RequestHandler{
 				}
 				return HttpResponseFactory.get302Response("/user/login.html");
 			}
+			return get405HttpResponse(GET);
+		}
 
-			if (isHTML(uri)) {
+		if (isHTML(uri)) {
+			if (GET.equals(httpRequest.getMethod())){
 				User findUser = getUserBySession(findSessionId);
 				if (findUser != null) { // 세션 ID로 User 찾은 경우
 					byte[] HTML = HTMLGenerator.getHTML(findUser.getName(), uri);
 					return HttpResponseFactory.get200Response(uri, HTML);
 				}
+				return getHttpResponse(uri);
 			}
-			return getHttpResponse(uri);
+			return get405HttpResponse(GET);
 		}
-		return get405HttpResponse(GET);
+
+		return getHttpResponse(uri);
     }
 
 	private static boolean verifyPassword(String findUserPassword, String password) {

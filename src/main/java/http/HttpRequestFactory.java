@@ -17,13 +17,7 @@ public class HttpRequestFactory {
     public static HttpRequest getRequest(InputStream in) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(getRequestHeader(br));
-		String requestBody;
-		Map<String, String> requestHeaders = httpRequestHeaderUtils.getRequestHeaders();
-		if (requestHeaders.containsKey("content-type") && requestHeaders.get("content-type").contains("multipart/form-data")) {
-			requestBody = getRawRequestBody(br, httpRequestHeaderUtils); //todo 멀티파트인 경우
-		}else{
-			requestBody = getRequestBody(br, httpRequestHeaderUtils);
-		}
+		String requestBody = getRequestBody(br, httpRequestHeaderUtils);
 
 		return new HttpRequestBuilder()
                 .method(httpRequestHeaderUtils.getRequestMethod())
