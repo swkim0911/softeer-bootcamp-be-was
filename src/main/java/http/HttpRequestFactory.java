@@ -49,15 +49,4 @@ public class HttpRequestFactory {
 		}
 		return ""; // body 없는 경우
 	}
-
-	private static String getRawRequestBody(BufferedReader br, HttpRequestHeaderUtils httpRequestHeaderUtils) throws IOException {
-		Map<String, String> fieldMap = httpRequestHeaderUtils.getRequestHeaders();
-		String contentLength = fieldMap.get("content-length");
-		if (contentLength != null) {
-			char[] buf = new char[Integer.parseInt(contentLength)];
-			br.read(buf);
-			return String.valueOf(buf); // url 인코딩 문자 디코딩
-		}
-		return ""; // body 없는 경우
-	}
 }
