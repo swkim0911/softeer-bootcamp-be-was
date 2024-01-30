@@ -17,7 +17,13 @@ public class HttpRequestFactory {
     public static HttpRequest getRequest(InputStream in) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		HttpRequestHeaderUtils httpRequestHeaderUtils = HttpRequestHeaderUtils.createHeaderUtils(getRequestHeader(br));
-		String requestBody = getRequestBody(br, httpRequestHeaderUtils);
+		String requestBody;
+		Map<String, String> requestHeaders = httpRequestHeaderUtils.getRequestHeaders();
+		if (requestHeaders.containsKey("content-type") && requestHeaders.get("content-type").contains("multipart/form-data")) {
+			requestBody = getRawRequestBody(br, httpRequestHeaderUtils); //todo 멀티파트인 경우
+		}else{
+			requestBody = getRequestBody(br, httpRequestHeaderUtils);
+		}
 
 		return new HttpRequestBuilder()
                 .method(httpRequestHeaderUtils.getRequestMethod())
@@ -46,6 +52,17 @@ public class HttpRequestFactory {
 			char[] buf = new char[Integer.parseInt(contentLength)];
 			br.read(buf);
 			return URLDecoder.decode(String.valueOf(buf), UTF_8); // url 인코딩 문자 디코딩
+		}
+		return ""; // body 없는 경우
+	}
+
+	private static String getRawRequestBody(BufferedReader br, HttpRequestHeaderUtils httpRequestHeaderUtils) throws IOException {
+		Map<String, String> fieldMap = httpRequestHeaderUtils.getRequestHeaders();
+		String contentLength = fieldMap.get("content-length");
+		if (contentLength != null) {
+			char[] buf = new char[Integer.parseInt(contentLength)];
+			br.read(buf);
+			return String.valueOf(buf); // url 인코딩 문자 디코딩
 		}
 		return ""; // body 없는 경우
 	}

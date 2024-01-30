@@ -11,11 +11,12 @@ import org.slf4j.LoggerFactory;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
+	private static final int THREAD_POOL_SIZE = 10;
     private static final int DEFAULT_PORT = 8080;
     public static void main(String[] args) throws Exception{
         int port = initPort(args);
         // 쓰레드 풀 생성
-        ExecutorService executor = Executors.newFixedThreadPool(10);
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
         // 서버소켓을 생성
         try (ServerSocket listenSocket = new ServerSocket(port)) {
             logger.info("Web Application Server started {} port.", port);
