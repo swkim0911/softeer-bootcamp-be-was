@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
-	private static final int THREAD_POOL_SIZE = 10;
+	private static final int THREAD_POOL_SIZE = 20;
     private static final int DEFAULT_PORT = 8080;
     public static void main(String[] args) throws Exception{
         int port = initPort(args);

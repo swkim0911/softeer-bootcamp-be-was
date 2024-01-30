@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class HttpRequestHeaderParser {
 
-    public static Map<String, String> parseRequestLine(String requestMessage){
+    public static Map<String, String> parseRequestLine(String requestHeader){
         Map<String, String> requestLineMap = new HashMap<>();
-        String[] splitRequestLine = splitRequestLine(requestMessage);
+        String[] splitRequestLine = splitRequestLine(requestHeader);
         putMethodField(splitRequestLine, requestLineMap);
         String uri = splitRequestLine[1];
         putUriField(uri, requestLineMap);
@@ -28,10 +28,10 @@ public class HttpRequestHeaderParser {
         return requestHeaderMap;
     }
 
-	private static String[] splitRequestLine(String requestMessage) {
-		String[] lines = requestMessage.split("\r\n");
-		String requestLine = lines[0];
-		return requestLine.split(" ");
+	private static String[] splitRequestLine(String requestHeader) {
+		String[] lines = requestHeader.split("\r\n");
+		String requestLine = lines[0].trim();
+		return requestLine.split("\\s");
 	}
     private static void putMethodField(String[] splitRequestLine, Map<String, String> requestLineMap) {
         String method = splitRequestLine[0];
