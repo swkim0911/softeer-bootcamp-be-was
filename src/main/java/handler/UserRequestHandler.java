@@ -67,7 +67,7 @@ public class UserRequestHandler implements RequestHandler{
 		}
 
 		if ("/user/logout".equals(uri)) { // 로그아웃
-			if (GET.equals(httpRequest.getMethod())) { //todo POST 변경
+			if (POST.equals(httpRequest.getMethod())) { //todo POST 변경
 				User findUser = getUserBySession(findSessionId);
 				SessionManager.removeSession(findSessionId); // 로그아웃으로 세션 삭제
 				if (findUser != null) {
