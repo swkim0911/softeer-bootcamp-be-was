@@ -5,11 +5,10 @@ import java.util.Map;
 
 public class HttpRequestHeaderParser {
 
-    public static Map<String, String> parseRequestLine(String requestMessage){
+    public static Map<String, String> parseRequestLine(String requestHeader){
         Map<String, String> requestLineMap = new HashMap<>();
-        String[] splitRequestLine = splitRequestLine(requestMessage);
+        String[] splitRequestLine = splitRequestLine(requestHeader);
         putMethodField(splitRequestLine, requestLineMap);
-        putVersionField(splitRequestLine, requestLineMap);
         String uri = splitRequestLine[1];
         putUriField(uri, requestLineMap);
         return requestLineMap;
@@ -21,29 +20,23 @@ public class HttpRequestHeaderParser {
             String headerLine = lines[i];
             String[] header = headerLine.split(":", 2);
             if (header.length > 1) {
-                String field = header[0];
-                String value = header[1].stripLeading();
+				String field = header[0].toLowerCase(); // 필드 이름은 case-insensitive 때문에 모두 소문자로 변경
+				String value = header[1].strip(); // trailing whitespace 제거
                 requestHeaderMap.put(field, value);
             }
         }
         return requestHeaderMap;
     }
-    private static void putVersionField(String[] splitRequestLine, Map<String, String> requestLineMap) {
-        String version = splitRequestLine[2];
-        requestLineMap.put("Version", version);
-    }
 
+	private static String[] splitRequestLine(String requestHeader) {
+		String[] lines = requestHeader.split("\r\n");
+		String requestLine = lines[0].trim();
+		return requestLine.split("\\s");
+	}
     private static void putMethodField(String[] splitRequestLine, Map<String, String> requestLineMap) {
         String method = splitRequestLine[0];
-        requestLineMap.put("Method", method);
+        requestLineMap.put("method", method);
     }
-
-    private static String[] splitRequestLine(String requestMessage) {
-        String[] lines = requestMessage.split("\r\n");
-        String requestLine = lines[0];
-        return requestLine.split(" ");
-    }
-
     private static void putUriField(String uri, Map<String, String> requestHeaderMap) {
         String requestUri;
         String queryString = "None";
@@ -54,7 +47,7 @@ public class HttpRequestHeaderParser {
         }else{
             requestUri = uri;
         }
-        requestHeaderMap.put("RequestUri", requestUri);
-        requestHeaderMap.put("QueryString", queryString);
+        requestHeaderMap.put("requestUri", requestUri);
+        requestHeaderMap.put("queryString", queryString);
     }
 }

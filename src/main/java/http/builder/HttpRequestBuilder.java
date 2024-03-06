@@ -1,20 +1,20 @@
 package http.builder;
 
 import http.HttpRequest;
+import http.method.HttpMethod;
 
 import java.util.Map;
 
 public class HttpRequestBuilder {
 
-    private String method;
+    private HttpMethod method;
     private String uri;
     private String queryString;
-    private String version;
     private Map<String, String> headerFields;
 	private String body;
 
     public HttpRequestBuilder method(String method) {
-        this.method = method;
+		this.method = HttpMethod.valueOf(method);
         return this;
     }
 
@@ -28,11 +28,6 @@ public class HttpRequestBuilder {
         return this;
     }
 
-    public HttpRequestBuilder version(String version) {
-        this.version = version;
-        return this;
-    }
-
     public HttpRequestBuilder headerFields(Map<String,String> headerFields) {
         this.headerFields = headerFields;
         return this;
@@ -43,6 +38,6 @@ public class HttpRequestBuilder {
 		return this;
 	}
     public HttpRequest build() {
-        return new HttpRequest(method, uri, queryString, version, headerFields, body);
+        return new HttpRequest(method, uri, queryString, headerFields, body);
     }
 }
